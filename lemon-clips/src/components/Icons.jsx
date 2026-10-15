@@ -39,3 +39,12 @@ export function Logo({ className = '' }) {
     </span>
   )
 }
+export const Chat = I(<path d="M4 5h16v11h-9l-5 4v-4H4z" />)
+export const FileText = I(<><path d="M14 3H6v18h12V7z" /><path d="M14 3v4h4M9 12h6M9 16h6" /></>)
+export const Mail = I(<><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></>)
+export const Send = I(<path d="M21 3 3 10.5l7 2.5 2.5 7z" />)
+export const ChevronLeft = I(<path d="m15 6-6 6 6 6" />)
+export const ChevronRight = I(<path d="m9 6 6 6-6 6" />)
+export const Quote = I(<path d="M7 7h4v4c0 3-1.5 5-4 6M15 7h4v4c0 3-1.5 5-4 6" />)
+export const Volume = I(<><path d="M4 9v6h4l5 4V5L8 9z" /><path d="M16.5 8.5a5 5 0 0 1 0 7" /></>)
+export const Mute = I(<><path d="M4 9v6h4l5 4V5L8 9z" /><path d="m17 9 5 6M22 9l-5 6" /></>)

@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react'
-import { nav } from '../content/site.js'
+import { nav as allNav } from '../content/site.js'
+import { cases } from '../content/cases.js'
+
+const nav = allNav.filter((n) => n.needs !== 'cases' || cases.length)
 import { useNav } from '../lib/nav.jsx'
 import { Logo, Menu, X, ArrowRight } from './Icons.jsx'
 
-const SPY = ['results', 'how', 'why', 'services', 'faq', 'apply']
+const SPY = ['get-started', 'results', 'services', 'how', 'feedback', 'faq', 'apply']
 
 export default function Nav() {
   const { page, go } = useNav()
@@ -31,7 +34,7 @@ export default function Nav() {
 
   useEffect(() => { document.body.style.overflow = open ? 'hidden' : '' }, [open])
 
-  const current = page === 'clippers' ? 'clippers' : active === 'why' ? 'how' : active
+  const current = page === 'clippers' ? 'clippers' : active
   const click = (to) => { setOpen(false); go(to) }
 
   return (
@@ -49,7 +52,7 @@ export default function Nav() {
             ))}
           </nav>
           <div className="flex items-center gap-2">
-            <button type="button" onClick={() => click('apply')} className="btn btn-primary hidden sm:inline-flex !min-h-[42px] !px-5 !text-[12.5px]">Launch a Campaign</button>
+            <button type="button" onClick={() => click('get-started')} className="btn btn-primary hidden sm:inline-flex !min-h-[42px] !px-5 !text-[12.5px]">Get Started</button>
             <button type="button" onClick={() => setOpen((o) => !o)} className="lg:hidden grid size-11 place-items-center rounded-full border border-hair" aria-expanded={open} aria-controls="mobile-menu" aria-label={open ? 'Close menu' : 'Open menu'}>
               {open ? <X /> : <Menu />}
             </button>
@@ -66,7 +69,7 @@ export default function Nav() {
                 {n.label}<ArrowRight className="size-5 text-muted" />
               </button>
             ))}
-            <button type="button" onClick={() => click('apply')} className="btn btn-primary mt-8 w-full">Launch a Campaign</button>
+            <button type="button" onClick={() => click('get-started')} className="btn btn-primary mt-8 w-full">Get Started</button>
           </nav>
         </div>
       )}

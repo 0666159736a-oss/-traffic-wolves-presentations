@@ -37,38 +37,36 @@ npm run build:single  # one self-contained HTML file → ../lemon-clips.html (Gi
   and open `https://<user>.github.io/<repo>/lemon-clips.html`.
 * **Custom domain**: point the domain at whichever host you use above.
 
+## Page structure
+
+Home: Hero (3 actions) → short lead form → Results* → Services → How it works + advantages →
+Client feedback* → FAQ → final block (3 actions) → short lead form.
+`*` renders only when `cases.js` / `testimonials.js` contain real entries. No placeholders are shown.
+
 ## Editing content
 
-Everything a marketer would change lives in `src/content/`:
+| File                           | What it holds                                                    |
+| ------------------------------ | ---------------------------------------------------------------- |
+| `src/content/site.js`          | Contacts, integrations, hero, hero video grid, services, steps, FAQ |
+| `src/content/cases.js`         | Real case studies (format documented in the file)                |
+| `src/content/testimonials.js`  | Real client feedback (format documented in the file)             |
+| `src/content/clippers.js`      | For Clippers page copy                                           |
 
-| File                        | What it holds                                                        |
-| --------------------------- | -------------------------------------------------------------------- |
-| `src/content/site.js`       | Contact/integration settings, nav, hero, stats, steps, services, FAQ |
-| `src/content/cases.js`      | Case studies (all **demo placeholders** until verified data is added) |
-| `src/content/clippers.js`   | Clipper page copy, sample campaign cards, dashboard sample data       |
-
-* **Case studies**: fill `views`, `videos`, `duration`, `summary`, `highlights`, optionally
-  `videoUrl`/`poster` (put files in `public/media/`), then set `demo: false`. The "Demo" badge
-  disappears and the view counter animates to the real number.
-* **Prices**: set `price: 'From $X'` on a service in `site.js`. `null` shows "Custom quote".
-* **Stats**: set `verified: true` once a figure is confirmed; unverified figures show a
-  "Replace with verified figure" tag.
+Put videos and images in `public/media/` and reference them as `media/<file>`.
+Use short (5–15 s), muted-friendly MP4 (H.264) loops under ~4 MB plus a JPG poster for fast mobile loading.
+Cases from the Traffic Wolves team use `attribution: 'team'` and are labelled "Traffic Wolves team experience".
 
 ## Integrations
 
-All network calls go through `src/lib/integrations.js`. With nothing configured the site runs
-in **demo mode**: forms validate and show the confirmation screen, but nothing is sent, and the
-confirmation says so.
+All network calls go through `src/lib/integrations.js`. With no endpoint configured, forms validate
+but tell the visitor plainly that nothing was sent. The site never fakes a successful submission.
 
-| Setting (in `site.js`) | Effect                                                                   |
-| ---------------------- | ------------------------------------------------------------------------ |
-| `leadWebhookUrl`       | Campaign requests and call requests are POSTed here as JSON (HubSpot, Make, Zapier, n8n, your API). Use it to create the CRM record and send the email notification. |
-| `clipperWebhookUrl`    | Clipper applications are POSTed here.                                    |
-| `calendarUrl`          | "Book a call" opens this link (Calendly, Cal.com, HubSpot Meetings) instead of the demo slot picker. |
-| `phone`                | Shows the "Call us now" button. Hidden while empty.                       |
-| `email`                | Shown in the footer.                                                      |
-| `platformUrl`          | "Explore Platform" links to the self-service app.                         |
-
-To use an SDK instead of a webhook, replace the body of `submitCampaignLead`,
-`submitClipperApplication` or `requestCall`; components only depend on their
-`{ mode, ok, error }` return value.
+| Setting (`site.js`)   | Effect |
+| --------------------- | ------ |
+| `leadWebhookUrl`      | Both lead forms (`type: 'lead'`) and presentation requests (`type: 'presentation'`) are POSTed here as JSON. Point it at your CRM / Make / Zapier / n8n. |
+| `presentationPdfUrl`  | Sent along with presentation requests so your email automation (Mailchimp, Resend, HubSpot workflow…) can email the PDF. |
+| `whatsapp`, `telegram`, `email` | Channels shown in **Contact a Manager**. Empty channels are hidden. |
+| `calendarUrl`         | Calendly or Cal.com link. **Book a Personal Strategy Session** embeds the real scheduler; a new-tab link is the fallback. |
+| `clipperWebhookUrl`   | Clipper applications (falls back to `leadWebhookUrl`). |
+| `privacyUrl`          | Linked from the consent checkbox. |
+| `platformUrl`, `clipperAppUrl` | Self-service platform and clipper app links. |

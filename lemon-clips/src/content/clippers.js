@@ -1,7 +1,6 @@
 // ─────────────────────────────────────────────────────────────
 // For Clippers page content.
-// Campaign offers below are SAMPLE layouts, not live campaigns.
-// Live campaigns should come from the platform API; set `sample: false` only for real offers.
+// Live campaigns are listed inside the clipper app (config.clipperAppUrl), never hard-coded here.
 // ─────────────────────────────────────────────────────────────
 
 export const clipperHero = {
@@ -17,13 +16,12 @@ export const earnSteps = [
   { title: 'Get paid on views', text: 'Approved videos earn at the campaign rate for eligible views.' },
 ]
 
-export const sampleCampaigns = [
-  { id: 's1', sample: true, artist: 'Artist Name', track: 'Track Title', genre: 'Hip-Hop', platforms: ['TikTok', 'Reels', 'Shorts'], rate: null, budget: null, hue: 48 },
-  { id: 's2', sample: true, artist: 'Artist Name', track: 'Track Title', genre: 'Pop', platforms: ['TikTok', 'Reels'], rate: null, budget: null, hue: 18 },
-  { id: 's3', sample: true, artist: 'Artist Name', track: 'Track Title', genre: 'R&B', platforms: ['TikTok', 'Shorts'], rate: null, budget: null, hue: 320 },
-  { id: 's4', sample: true, artist: 'Artist Name', track: 'Track Title', genre: 'Electronic', platforms: ['TikTok'], rate: null, budget: null, hue: 200 },
-  { id: 's5', sample: true, artist: 'Artist Name', track: 'Track Title', genre: 'Latin', platforms: ['Reels', 'Shorts'], rate: null, budget: null, hue: 140 },
-  { id: 's6', sample: true, artist: 'Artist Name', track: 'Track Title', genre: 'Country', platforms: ['TikTok', 'Reels'], rate: null, budget: null, hue: 30 },
+// What every live campaign card in the clipper app shows.
+export const campaignFields = [
+  { title: 'Artist & track', text: 'The song you will use as the sound.' },
+  { title: 'Rate per 1K views', text: 'Set by the campaign, shown before you join.' },
+  { title: 'Available budget', text: 'Live budget left for payouts.' },
+  { title: 'Brief & platforms', text: 'Vibe, rules and where to post.' },
 ]
 
 export const joinSteps = [
@@ -53,22 +51,6 @@ export const teamPoints = [
   { title: 'Split earnings', text: 'See what each member and page earned on each campaign.' },
   { title: 'Priority access', text: 'Consistent, high-quality teams can be invited to private campaigns.' },
 ]
-
-// Sample data for the platform preview tabs. Clearly labelled as sample in the UI.
-export const dashboardSample = {
-  submissions: [
-    { video: 'Dance edit #1', platform: 'TikTok', status: 'Approved', views: 48200 },
-    { video: 'Lyric overlay', platform: 'Reels', status: 'In review', views: 12900 },
-    { video: 'POV skit', platform: 'Shorts', status: 'Approved', views: 31450 },
-    { video: 'Car ride vibe', platform: 'TikTok', status: 'Rejected', views: 0 },
-  ],
-  performance: [12, 18, 15, 26, 34, 29, 41, 52, 47, 63, 71, 66, 84, 92],
-  team: [
-    { name: 'Editor A', pages: 4, videos: 22 },
-    { name: 'Editor B', pages: 3, videos: 17 },
-    { name: 'Editor C', pages: 2, videos: 9 },
-  ],
-}
 
 export const clipperFormOptions = {
   types: ['Solo clipper', 'Content creator', 'Clipping team / agency'],

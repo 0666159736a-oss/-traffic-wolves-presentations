@@ -2,19 +2,19 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { NavContext, scrollToId, setHash } from './lib/nav.jsx'
 import Nav from './components/Nav.jsx'
 import Footer from './components/Footer.jsx'
-import BookCall from './components/BookCall.jsx'
+import Dialogs from './components/Dialogs.jsx'
 import Home from './pages/Home.jsx'
 import Clippers from './pages/Clippers.jsx'
 
 const pageFor = (token) => (token.startsWith('clippers') ? 'clippers' : 'home')
 const readHash = () => { try { return decodeURIComponent(location.hash.slice(1)) } catch { return '' } }
-const TITLES = { home: 'Lemon Clips — Make Your Music Go Viral', clippers: 'For Clippers — Lemon Clips' }
+const TITLES = { home: 'Lemon Clips — Music Promotion, Clipping & SMM', clippers: 'For Clippers — Lemon Clips' }
 
 export default function App() {
   const [page, setPage] = useState(() => pageFor(readHash()))
   const [pending, setPending] = useState(() => ({ id: readHash(), n: 0 }))
-  const [booking, setBooking] = useState({ open: false, prefill: null })
-  const [preset, setPreset] = useState('')
+  const [dialog, setDialog] = useState(null)
+  const [preset, setPreset] = useState(null)
 
   // Scroll to a pending target once the right page has rendered.
   useEffect(() => {
@@ -32,10 +32,11 @@ export default function App() {
     return () => window.removeEventListener('popstate', onPop)
   }, [])
 
-  const openBooking = useCallback((prefill = null) => setBooking({ open: true, prefill }), [])
+  const open = useCallback((which) => setDialog(which), [])
+  const choosePreset = useCallback((value) => setPreset((p) => ({ value, n: (p?.n || 0) + 1 })), [])
 
   const go = useCallback((to) => {
-    if (to === 'book') return openBooking()
+    if (to === 'book') return open('session')
     const target = pageFor(to)
     if (target !== page) {
       try { history.pushState(null, '', to === 'top' ? location.pathname + location.search : '#' + to) } catch { /* sandboxed */ }
@@ -44,9 +45,9 @@ export default function App() {
       setHash(to === 'top' ? '' : to)
     }
     setPending((p) => ({ id: to, n: p.n + 1 }))
-  }, [page, openBooking])
+  }, [page, open])
 
-  const ctx = useMemo(() => ({ page, go, openBooking, preset, choosePreset: setPreset }), [page, go, openBooking, preset])
+  const ctx = useMemo(() => ({ page, go, open, preset, choosePreset }), [page, go, open, preset, choosePreset])
 
   return (
     <NavContext.Provider value={ctx}>
@@ -56,7 +57,7 @@ export default function App() {
         {page === 'clippers' ? <Clippers key="clippers" /> : <Home key="home" />}
       </main>
       <Footer />
-      <BookCall open={booking.open} prefill={booking.prefill} onClose={() => setBooking({ open: false, prefill: null })} />
+      <Dialogs which={dialog} onClose={() => setDialog(null)} />
     </NavContext.Provider>
   )
 }

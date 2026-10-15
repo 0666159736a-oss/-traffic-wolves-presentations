@@ -1,159 +1,126 @@
 // ─────────────────────────────────────────────────────────────
-// Lemon Clips — editable site content.
-// Change copy, links and integrations here; components read from this file.
+// Lemon Clips — editable site content and integration settings.
+// Components read from this file. Nothing here is invented: empty values hide the related UI.
 // ─────────────────────────────────────────────────────────────
 
 export const config = {
   brand: 'Lemon Clips',
-  // Leave empty to hide the "Call Us Now" button. Use E.164 format, e.g. '+13105550100'.
-  phone: '',
-  // Public contact email shown in the footer. Leave empty to hide.
-  email: '',
-  // Booking link (Calendly, Cal.com, HubSpot Meetings…). Empty = built-in demo slot picker.
-  calendarUrl: '',
-  // Lead/CRM webhook (HubSpot, Make, Zapier, n8n, your API). Empty = demo mode, nothing is sent.
-  leadWebhookUrl: '',
-  // Separate webhook for clipper applications. Empty = demo mode.
-  clipperWebhookUrl: '',
-  // Link to the self-service platform / app. Empty = "Explore Platform" scrolls to the form.
-  platformUrl: '',
-}
 
-export const nav = [
-  { label: 'Home', to: 'top' },
-  { label: 'Results', to: 'results' },
-  { label: 'How It Works', to: 'how' },
-  { label: 'Services', to: 'services' },
-  { label: 'For Clippers', to: 'clippers' },
-  { label: 'FAQ', to: 'faq' },
-]
+  // ── Contact a Manager ── real company contacts only. Empty = channel hidden.
+  whatsapp: '',        // digits with country code, e.g. '13105550100'
+  telegram: '',        // username without @, e.g. 'lemonclips_manager'
+  email: '',           // e.g. 'hello@lemonclips.com'
+
+  // ── Book a Personal Strategy Session ── Calendly or Cal.com scheduling link.
+  // e.g. 'https://calendly.com/lemonclips/strategy' or 'https://cal.com/lemonclips/strategy'
+  calendarUrl: '',
+
+  // ── Lead capture ── one endpoint for every form on the site (CRM / Make / Zapier / n8n / your API).
+  // Requests are POSTed as JSON with a `type` field: 'lead' | 'presentation' | 'clipper'.
+  leadWebhookUrl: '',
+  // Optional separate endpoint for clipper applications. Falls back to leadWebhookUrl.
+  clipperWebhookUrl: '',
+
+  // ── Free presentation ── the PDF your email service sends after a 'presentation' request.
+  // The site never links the PDF directly; your email automation attaches/sends it.
+  presentationPdfUrl: '',
+
+  // Privacy policy page linked from the consent checkbox. Empty = text without a link.
+  privacyUrl: '',
+  // Self-service platform (clients) and clipper app. Empty = buttons lead to the form instead.
+  platformUrl: '',
+  clipperAppUrl: '',
+}
 
 export const hero = {
-  eyebrow: 'Music promotion through short-form video',
+  eyebrow: 'Music promotion · Creator campaigns · SMM',
   title: ['MAKE YOUR', 'MUSIC GO', 'VIRAL.'],
-  subtitle:
-    'Get your music heard by millions through TikTok, Instagram Reels & YouTube Shorts.',
-  audiences: ['Independent Artists', 'Record Labels', 'Music Managers', 'Marketing Agencies'],
+  subtitle: 'Music promotion, creator-powered campaigns and full-service SMM for artists, labels and agencies.',
 }
 
-// Big animated figures in "Why Lemon Clips".
-// verified:false shows a "replace with verified figure" tag next to the number.
-export const stats = [
-  { value: 3, suffix: '', label: 'Short-form platforms per campaign', note: 'TikTok · Reels · Shorts', verified: true },
-  { value: 100, suffix: 's', label: 'Creators who can post with your track', note: 'Network size', verified: false },
-  { value: 1, suffix: 'M', label: 'View guarantee on eligible packages', note: 'Package condition, not a blanket promise', verified: true },
-]
+// Real short-form clips for the hero video grid: { videoUrl, poster, caption }.
+// Leave empty until original files are supplied; the hero then shows the brand graphic.
+export const heroMedia = []
 
-export const steps = [
-  { n: '01', title: 'Submit Your Music', text: 'Share your track, goals and campaign details.' },
-  { n: '02', title: 'Launch Your Campaign', text: 'Creators produce and distribute short-form videos using your music.' },
-  { n: '03', title: 'Track & Scale', text: 'Monitor performance, identify winning content and scale your campaign.' },
-]
-
-export const advantages = [
-  { title: 'Creator-powered distribution', text: 'Your track is posted by many independent creators at once, so it reaches audiences your own page never could.' },
-  { title: 'TikTok, Reels & Shorts', text: 'One campaign covers the three feeds where songs get discovered today.' },
-  { title: 'Scalable short-form campaigns', text: 'Start with a focused test, then add creators and budget behind what performs.' },
-  { title: 'Performance tracking & reporting', text: 'See every posted video, its views and which hooks are carrying the song.' },
-  { title: 'Flexible campaign management', text: 'Run it yourself, hand it to our team, or anything in between.' },
-  { title: 'Performance-based options', text: 'Pay-for-performance structures are available for eligible campaigns.' },
-]
-
-export const whyCopy = {
-  lead: 'A single post is a lottery ticket. Hundreds of creators posting your sound in their own style is a distribution system.',
-  points: [
-    'Every new video is another chance for the algorithm to pick up the sound.',
-    'Different creators reach different audiences: dance, lifestyle, edits, memes, fan pages.',
-    'Volume shows which hook works. Then budget moves behind the winners.',
-  ],
-}
-
-// Services. Set `price` to a string (e.g. 'From $2,500') to display it; null shows "Custom pricing".
 export const services = [
   {
-    id: 'self',
-    name: 'Self-Service',
-    tagline: 'Launch and manage your own music clipping campaign.',
-    text: 'Use the platform to set your budget and rates, approve creators and follow results in real time.',
-    price: null,
-    bestFor: 'Artists and teams who want full control',
-    cta: { label: 'Explore Platform', action: 'platform' },
-    features: { setup: 'You', creators: 'Open campaign marketplace', strategy: false, production: false, reporting: 'Live dashboard', manager: false },
+    id: 'clipping',
+    name: 'Clipping Campaigns',
+    formValue: 'Clipping',
+    tagline: 'Scale your music through creator-made videos across TikTok, Reels and Shorts.',
+    points: ['Launch yourself on the platform', 'Start with a test campaign', 'Scale the videos that work'],
+    cta: 'Get Started',
   },
   {
     id: 'managed',
-    name: 'Managed Campaign',
-    tagline: 'Your music. Our team. Your growth.',
-    text: 'Our team runs the release push: briefs creators, coordinates posting and keeps results on track.',
-    price: null,
-    featured: true,
-    bestFor: 'Releases that need momentum without extra work',
-    cta: { label: 'Launch a Campaign', action: 'apply' },
-    features: { setup: 'Lemon Clips team', creators: 'Selected & coordinated', strategy: 'Campaign brief', production: false, reporting: 'Dashboard + recaps', manager: true },
+    name: 'Managed Promotion',
+    formValue: 'Managed Promotion',
+    tagline: 'Your campaign, handled by a dedicated manager.',
+    points: ['Personal campaign manager', 'Clipper selection & coordination', 'Publishing control', 'Results reporting'],
+    cta: 'Get Started',
   },
   {
-    id: 'full',
-    name: 'Full-Service Music Promotion',
-    tagline: 'From strategy to distribution.',
-    text: 'Content strategy, video production, posting and scaling, handled end to end for artists and labels.',
-    price: null,
-    bestFor: 'Labels, priority releases and multi-track rollouts',
-    cta: { label: 'Talk to Our Team', action: 'book' },
-    features: { setup: 'Lemon Clips team', creators: 'Selected & coordinated', strategy: 'Full content strategy', production: 'Original videos produced', reporting: 'Dashboard + strategy reviews', manager: true },
+    id: 'smm',
+    name: 'Full-Service SMM',
+    formValue: 'Full-Service SMM',
+    tagline: 'We manage your content, social media presence and growth strategy.',
+    points: ['Content strategy & content plan', 'Short-form video production & editing', 'Posting and social media management', 'Personal manager', 'Extra reach through clipping'],
+    cta: 'Get Started',
+    featured: true,
   },
 ]
 
-export const serviceRows = [
-  { key: 'setup', label: 'Who runs the campaign' },
-  { key: 'creators', label: 'Creator network' },
-  { key: 'strategy', label: 'Content strategy' },
-  { key: 'production', label: 'Video production' },
-  { key: 'reporting', label: 'Reporting' },
-  { key: 'manager', label: 'Dedicated campaign manager' },
+export const steps = [
+  { title: 'Tell Us About Your Project', text: 'Share your music, goals and where you are today.' },
+  { title: 'We Build Your Growth Plan', text: 'You get a personal proposal: the right service, channels and timeline.' },
+  { title: 'Launch, Track & Scale', text: 'We go live, report results and scale what works.' },
+]
+
+export const advantages = [
+  { title: 'Creator Network', icon: 'users' },
+  { title: 'Dedicated Management', icon: 'manager' },
+  { title: 'Real Performance Tracking', icon: 'chart' },
+  { title: 'Scalable Campaigns', icon: 'scale' },
 ]
 
 export const faq = [
   {
-    q: 'How does music clipping work?',
-    a: 'You give us a track and a goal. Creators in our network make short videos that use your song as the sound and post them on TikTok, Instagram Reels and YouTube Shorts. Each post puts the song in front of that creator’s audience, and the best-performing formats get scaled.',
+    q: 'How does Lemon Clips work?',
+    a: 'Tell us about your music and goals. We send a personal plan, then promote your release through creator videos, managed campaigns or full SMM, and report the results.',
   },
   {
-    q: 'How much does a campaign cost?',
-    a: 'It depends on the service model, the number of creators and how long the campaign runs. Self-service campaigns start from the budget you set. For managed and full-service campaigns we send a quote after a short call.',
+    q: 'What services do you offer?',
+    a: 'Three options: Clipping Campaigns, Managed Promotion with a dedicated manager, and Full-Service SMM that covers strategy, content, posting and growth.',
   },
   {
-    q: 'Do you guarantee views?',
-    a: 'Selected packages include a 1,000,000-view guarantee, and the terms are spelled out in the proposal for that package. We do not guarantee streams, chart placements or that a song goes viral. No one honestly can.',
+    q: 'Can I start with a test campaign?',
+    a: 'Yes. You can start with a smaller test to see how your music performs before scaling.',
   },
   {
-    q: 'How long does a campaign take?',
-    a: 'Creators can start posting soon after your brief and budget are approved. Length depends on budget and goals: some campaigns are a short launch push, others run for several weeks and are extended once the winning videos are clear. Your plan will state the timeline.',
+    q: 'Do I get a dedicated manager?',
+    a: 'Managed Promotion and Full-Service SMM include a personal manager. Clipping Campaigns can be run on your own through the platform.',
   },
   {
-    q: 'What content do I need to provide?',
-    a: 'At minimum, a link to the released track (or the sound on TikTok) and a short brief about the song and the audience you want. Artwork, lyrics, artist footage and do-not-do notes all help.',
-  },
-  {
-    q: 'Can I track campaign performance?',
-    a: 'Yes. You see every posted video, its platform and its view count, plus totals for the campaign. Managed and full-service clients also get regular recaps from their campaign manager.',
-  },
-  {
-    q: 'Do you manage campaigns for artists?',
-    a: 'Yes. With a Managed Campaign or Full-Service plan, our team handles creator selection, briefs, posting coordination and optimization.',
-  },
-  {
-    q: 'Can labels launch multiple campaigns?',
-    a: 'Yes. Labels and agencies can run several releases at once, each with its own budget and reporting, under one account and one point of contact.',
+    q: 'How do I get started?',
+    a: 'Fill in the short form, contact a manager, or book a strategy session. We reply with next steps and a proposal.',
   },
 ]
 
 export const finalCta = {
-  title: ['YOUR NEXT RELEASE', 'DESERVES MORE', 'ATTENTION.'],
-  subtitle: 'Let’s build a campaign that puts your music in front of more people.',
+  title: ['READY TO GROW', 'YOUR MUSIC?'],
+  subtitle: 'Let’s build the right promotion strategy for your next release.',
 }
 
 export const formOptions = {
-  roles: ['Artist', 'Label', 'Agency', 'Manager'],
-  budgets: ['Under $1,000', '$1,000 – $2,500', '$2,500 – $5,000', '$5,000 – $10,000', '$10,000+', 'Not sure yet'],
-  goals: ['Launch a new release', 'Push an existing song', 'Grow artist awareness', 'Start a TikTok trend', 'Multi-release / label rollout', 'Something else'],
+  roles: ['Artist', 'Label', 'Agency', 'Other'],
+  interests: ['Clipping', 'Managed Promotion', 'Full-Service SMM', 'Not Sure'],
 }
+
+export const nav = [
+  { label: 'Home', to: 'top' },
+  { label: 'Results', to: 'results', needs: 'cases' },
+  { label: 'Services', to: 'services' },
+  { label: 'How It Works', to: 'how' },
+  { label: 'For Clippers', to: 'clippers' },
+  { label: 'FAQ', to: 'faq' },
+]

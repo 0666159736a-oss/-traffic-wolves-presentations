@@ -1,177 +1,118 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { config, formOptions } from '../content/site.js'
-import { submitCampaignLead } from '../lib/integrations.js'
+import { submitLead } from '../lib/integrations.js'
 import { useNav } from '../lib/nav.jsx'
-import { Choice, EMAIL_RE, Field, PHONE_RE, isUrl } from './Form.jsx'
-import { ArrowRight, Calendar, Check, Phone } from './Icons.jsx'
+import { Choice, EMAIL_RE, Field, PHONE_RE } from './Form.jsx'
+import { ArrowRight, Calendar, Chat, Check } from './Icons.jsx'
 
-const EMPTY = { name: '', email: '', phone: '', role: '', project: '', link: '', budget: '', goal: '', details: '', service: '' }
-const DRAFT_KEY = 'lemonclips-lead-draft'
+const EMPTY = { name: '', email: '', phone: '', role: '', interest: '', consent: false }
 
-function validate(step, v) {
-  const e = {}
-  if (step === 1) {
-    if (v.name.trim().length < 2) e.name = 'Enter your full name.'
-    if (!EMAIL_RE.test(v.email.trim())) e.email = 'Enter a valid email, like you@label.com.'
-    if (!PHONE_RE.test(v.phone.trim())) e.phone = 'Enter a phone or WhatsApp number with country code, like +1 310 555 0100.'
-    if (!v.role) e.role = 'Choose the option that describes you best.'
-  } else {
-    if (v.project.trim().length < 2) e.project = 'Enter the artist or project name.'
-    if (!isUrl(v.link)) e.link = 'Paste a full link to the song, starting with https:// (Spotify, Apple Music, YouTube, TikTok sound…).'
-    if (!v.budget) e.budget = 'Choose a budget range. “Not sure yet” is fine.'
-    if (!v.goal) e.goal = 'Choose the main goal for this campaign.'
-  }
-  return e
+export function Consent({ id, checked, onChange, error }) {
+  return (
+    <div className="flex flex-col gap-1.5">
+      <label htmlFor={id} className="flex cursor-pointer items-start gap-3 text-[13.5px] leading-snug text-muted">
+        <input id={id} type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} aria-invalid={!!error}
+          className="mt-0.5 size-5 shrink-0 cursor-pointer accent-[#f6d23c]" />
+        <span>
+          I agree to the processing of my personal data and to be contacted about my request
+          {config.privacyUrl ? <> as described in the <a href={config.privacyUrl} target="_blank" rel="noopener noreferrer" className="text-cream underline underline-offset-2">Privacy Policy</a></> : null}.
+        </span>
+      </label>
+      {error && <p id={`${id}-err`} className="text-[13px] text-bad" role="alert">{error}</p>}
+    </div>
+  )
 }
 
-export default function LeadForm() {
-  const { preset, go, openBooking } = useNav()
-  const [step, setStep] = useState(1)
-  const [v, setV] = useState(() => {
-    try { return { ...EMPTY, ...JSON.parse(localStorage.getItem(DRAFT_KEY) || '{}') } } catch { return EMPTY }
-  })
-  const [errors, setErrors] = useState({})
-  const [sending, setSending] = useState(false)
-  const [result, setResult] = useState(null)
-  const top = useRef(null)
+/** Shown when no endpoint is configured: honest, and still offers the next step. */
+export function NotConnected({ onBack, what = 'request' }) {
+  const { open } = useNav()
+  return (
+    <div className="flex flex-col items-start gap-4 animate-rise">
+      <span className="rounded-md border border-warn/50 bg-warn/10 px-2.5 py-1 font-mono text-[11px] font-bold uppercase tracking-wider text-warn">Not sent</span>
+      <h3 className="display text-[clamp(24px,3.4vw,34px)]">This form isn’t connected yet.</h3>
+      <p className="max-w-lg text-[15.5px] leading-relaxed text-muted">Your details are valid, but this preview has no lead inbox configured, so your {what} was not delivered. Reach a manager directly instead.</p>
+      <div className="flex flex-wrap gap-3">
+        <button type="button" className="btn btn-primary" onClick={() => open('manager')}><Chat /> Contact a manager</button>
+        <button type="button" className="btn btn-ghost" onClick={onBack}>Back to form</button>
+      </div>
+    </div>
+  )
+}
 
-  useEffect(() => { if (preset) setV((x) => ({ ...x, service: preset })) }, [preset])
-  useEffect(() => { try { localStorage.setItem(DRAFT_KEY, JSON.stringify(v)) } catch { /* storage blocked */ } }, [v])
+export default function LeadForm({ idPrefix, compact = false }) {
+  const { preset, open } = useNav()
+  const [v, setV] = useState(EMPTY)
+  const [errors, setErrors] = useState({})
+  const [state, setState] = useState('idle') // idle | sending | sent | not-connected
+  const id = (k) => `${idPrefix}-${k}`
+
+  useEffect(() => { if (preset) setV((x) => ({ ...x, interest: preset.value })) }, [preset])
 
   const set = (k) => (val) => {
-    setV((x) => ({ ...x, [k]: typeof val === 'string' ? val : val.target.value }))
+    setV((x) => ({ ...x, [k]: val?.target ? val.target.value : val }))
     if (errors[k]) setErrors((e) => ({ ...e, [k]: undefined }))
   }
-  const inv = (k) => ({ 'aria-invalid': !!errors[k], 'aria-describedby': errors[k] ? `${k}-err` : undefined })
-
-  const focusFirstError = (e) => {
-    const first = Object.keys(e)[0]
-    requestAnimationFrame(() => document.getElementById(first)?.focus?.())
-  }
-
-  const next = () => {
-    const e = validate(1, v)
-    setErrors(e)
-    if (Object.keys(e).length) return focusFirstError(e)
-    setStep(2)
-    top.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
+  const inv = (k) => ({ 'aria-invalid': !!errors[k], 'aria-describedby': errors[k] ? `${id(k)}-err` : undefined })
 
   const submit = async (ev) => {
     ev.preventDefault()
-    if (step === 1) return next()
-    const e = validate(2, v)
+    const e = {}
+    if (v.name.trim().length < 2) e.name = 'Enter your name.'
+    if (!EMAIL_RE.test(v.email.trim())) e.email = 'Enter a valid email, like you@label.com.'
+    if (!PHONE_RE.test(v.phone.trim())) e.phone = 'Enter a number with country code, like +1 310 555 0100.'
+    if (!v.role) e.role = 'Choose one.'
+    if (!v.interest) e.interest = 'Choose one. “Not Sure” is fine.'
+    if (!v.consent) e.consent = 'Please confirm so we can contact you.'
     setErrors(e)
-    if (Object.keys(e).length) return focusFirstError(e)
-    setSending(true)
-    const r = await submitCampaignLead(v)
-    setSending(false)
-    if (!r.ok) return setErrors({ form: r.error })
-    setResult(r)
-    try { localStorage.removeItem(DRAFT_KEY) } catch { /* ignore */ }
-    top.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    if (Object.keys(e).length) { requestAnimationFrame(() => document.getElementById(id(Object.keys(e)[0]))?.focus()); return }
+    setState('sending')
+    const r = await submitLead({ name: v.name, email: v.email, phone: v.phone, role: v.role, interest: v.interest, consent: true, form: idPrefix })
+    if (r.status === 'error') { setErrors({ form: r.error }); setState('idle'); return }
+    setState(r.status)
   }
 
-  const reset = () => { setV(EMPTY); setStep(1); setResult(null); setErrors({}) }
+  if (state === 'not-connected') return <NotConnected onBack={() => setState('idle')} />
 
-  if (result) {
+  if (state === 'sent') {
     return (
-      <div ref={top} className="flex flex-col items-start gap-6 p-6 sm:p-10">
-        <span className="grid size-14 place-items-center rounded-full bg-lemon text-[#14120a]"><Check className="size-7" /></span>
-        <div className="flex flex-col gap-3">
-          <h3 className="display text-[clamp(30px,5vw,46px)]">Thanks, {v.name.split(' ')[0]}.<br /><span className="text-lemon">Your request is in.</span></h3>
-          <p className="text-muted text-[16.5px] leading-relaxed max-w-lg">
-            We’ll review <strong className="text-cream">{v.project}</strong> and reply to <strong className="text-cream">{v.email}</strong> with next steps. The fastest way to start is a 20-minute call.
-          </p>
-          {result.mode === 'demo' && (
-            <p className="demo-tag w-fit">Demo mode · nothing was sent. Connect a CRM in content/site.js</p>
-          )}
-        </div>
+      <div className="flex flex-col items-start gap-4 animate-rise">
+        <span className="grid size-12 place-items-center rounded-full bg-lemon text-[#14120a]"><Check className="size-6" /></span>
+        <h3 className="display text-[clamp(26px,4vw,40px)]">Thanks, {v.name.split(' ')[0]}. <span className="text-lemon">We got it.</span></h3>
+        <p className="max-w-lg text-muted">A manager will reach out at {v.email}. Want to skip the wait? Pick a time for a strategy session.</p>
         <div className="flex flex-wrap gap-3">
-          <button type="button" className="btn btn-primary" onClick={() => openBooking({ name: v.name, email: v.email })}><Calendar /> Book your call</button>
-          {config.phone && <a className="btn btn-ghost" href={`tel:${config.phone}`}><Phone /> Call us now</a>}
-          <button type="button" className="btn btn-ghost" onClick={reset}>Submit another release</button>
+          <button type="button" className="btn btn-primary" onClick={() => open('session')}><Calendar /> Book a strategy session</button>
+          <button type="button" className="btn btn-ghost" onClick={() => { setV(EMPTY); setState('idle') }}>Send another</button>
         </div>
-        <button type="button" className="text-[14px] text-muted underline underline-offset-4 hover:text-lemon" onClick={() => go('results')}>Meanwhile, see how campaigns are reported</button>
       </div>
     )
   }
 
   return (
-    <form ref={top} noValidate onSubmit={submit} className="flex flex-col gap-7 p-6 sm:p-10">
-      <div className="flex items-center gap-3" aria-label={`Step ${step} of 2`}>
-        {[1, 2].map((s) => (
-          <button key={s} type="button" disabled={s === 2 && step === 1} onClick={() => s === 1 && setStep(1)}
-            className={`flex items-center gap-2.5 text-[13px] font-semibold ${step === s ? 'text-cream' : 'text-muted'} disabled:cursor-default`}>
-            <span className={`grid size-8 place-items-center rounded-full font-mono text-[12px] ${step >= s ? 'bg-lemon text-[#14120a]' : 'border border-hair'}`}>{step > s ? <Check className="size-4" /> : s}</span>
-            {s === 1 ? 'Your details' : 'Your campaign'}
-          </button>
-        ))}
-        <span className="ml-auto h-1 w-20 sm:w-32 overflow-hidden rounded-full bg-white/10">
-          <span className="block h-full bg-lemon transition-all duration-500" style={{ width: step === 1 ? '50%' : '100%' }} />
-        </span>
+    <form noValidate onSubmit={submit} className="flex flex-col gap-5">
+      <div className={`grid gap-4 ${compact ? 'sm:grid-cols-3' : 'sm:grid-cols-2 lg:grid-cols-3'}`}>
+        <Field id={id('name')} label="Name" error={errors.name}>
+          <input id={id('name')} className="field" autoComplete="name" value={v.name} onChange={set('name')} placeholder="Your name" {...inv('name')} />
+        </Field>
+        <Field id={id('email')} label="Email" error={errors.email}>
+          <input id={id('email')} type="email" inputMode="email" className="field" autoComplete="email" value={v.email} onChange={set('email')} placeholder="you@label.com" {...inv('email')} />
+        </Field>
+        <Field id={id('phone')} label="WhatsApp / Phone" error={errors.phone}>
+          <input id={id('phone')} type="tel" inputMode="tel" className="field" autoComplete="tel" value={v.phone} onChange={set('phone')} placeholder="+1 310 555 0100" {...inv('phone')} />
+        </Field>
       </div>
-
-      {v.service && (
-        <div className="flex flex-wrap items-center gap-2 text-[14px] text-muted">
-          Interested in: <span className="rounded-full border border-line px-3 py-1 text-lemon">{v.service}</span>
-          <button type="button" className="underline underline-offset-4 hover:text-cream" onClick={() => setV((x) => ({ ...x, service: '' }))}>Clear</button>
-        </div>
-      )}
-
-      {step === 1 ? (
-        <div key="s1" className="grid gap-5 sm:grid-cols-2 animate-rise">
-          <Field id="name" label="Name" error={errors.name}>
-            <input id="name" className="field" autoComplete="name" value={v.name} onChange={set('name')} placeholder="Jordan Lee" {...inv('name')} />
-          </Field>
-          <Field id="email" label="Email" error={errors.email}>
-            <input id="email" type="email" inputMode="email" className="field" autoComplete="email" value={v.email} onChange={set('email')} placeholder="you@label.com" {...inv('email')} />
-          </Field>
-          <Field id="phone" label="WhatsApp / Phone" error={errors.phone}>
-            <input id="phone" type="tel" inputMode="tel" className="field" autoComplete="tel" value={v.phone} onChange={set('phone')} placeholder="+1 310 555 0100" {...inv('phone')} />
-          </Field>
-          <Field id="role" label="I am a…" error={errors.role}>
-            <Choice id="role" options={formOptions.roles} value={v.role} onChange={set('role')} error={errors.role} />
-          </Field>
-        </div>
-      ) : (
-        <div key="s2" className="grid gap-5 sm:grid-cols-2 animate-rise">
-          <Field id="project" label="Artist or project name" error={errors.project}>
-            <input id="project" className="field" value={v.project} onChange={set('project')} placeholder="Artist, release or label roster" {...inv('project')} />
-          </Field>
-          <Field id="link" label="Link to music" error={errors.link}>
-            <input id="link" type="url" inputMode="url" className="field" value={v.link} onChange={set('link')} placeholder="https://open.spotify.com/track/…" {...inv('link')} />
-          </Field>
-          <Field id="budget" label="Campaign budget" error={errors.budget}>
-            <select id="budget" className="field" value={v.budget} onChange={set('budget')} {...inv('budget')}>
-              <option value="">Select a range</option>
-              {formOptions.budgets.map((b) => <option key={b}>{b}</option>)}
-            </select>
-          </Field>
-          <Field id="goal" label="Main campaign goal" error={errors.goal}>
-            <select id="goal" className="field" value={v.goal} onChange={set('goal')} {...inv('goal')}>
-              <option value="">Select a goal</option>
-              {formOptions.goals.map((g) => <option key={g}>{g}</option>)}
-            </select>
-          </Field>
-          <div className="sm:col-span-2">
-            <Field id="details" label="Additional details" optional>
-              <textarea id="details" className="field" value={v.details} onChange={set('details')} placeholder="Release date, target audience, references, anything we should avoid…" maxLength={1200} />
-            </Field>
-          </div>
-        </div>
-      )}
-
-      {errors.form && <p className="text-bad text-[14px]" role="alert">{errors.form}</p>}
-
-      <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
-        {step === 2 ? (
-          <button type="button" className="btn btn-ghost" onClick={() => setStep(1)}>Back</button>
-        ) : (
-          <p className="text-[13px] text-muted max-w-xs">Two short steps. Takes about two minutes.</p>
-        )}
-        <button type="submit" className="btn btn-primary" disabled={sending}>
-          {sending ? 'Sending…' : step === 1 ? <>Continue <ArrowRight /></> : <>Send campaign request <ArrowRight /></>}
+      <div className="grid gap-4 lg:grid-cols-[auto_1fr] lg:gap-8">
+        <Field id={id('role')} label="I am" error={errors.role}>
+          <Choice id={id('role')} options={formOptions.roles} value={v.role} onChange={set('role')} error={errors.role} />
+        </Field>
+        <Field id={id('interest')} label="What are you looking for?" error={errors.interest}>
+          <Choice id={id('interest')} options={formOptions.interests} value={v.interest} onChange={set('interest')} error={errors.interest} />
+        </Field>
+      </div>
+      {errors.form && <p className="text-[14px] text-bad" role="alert">{errors.form}</p>}
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <Consent id={id('consent')} checked={v.consent} onChange={set('consent')} error={errors.consent} />
+        <button type="submit" className="btn btn-primary !min-h-[54px] shrink-0 lg:min-w-[220px]" disabled={state === 'sending'}>
+          {state === 'sending' ? 'Sending…' : <>Get my plan <ArrowRight /></>}
         </button>
       </div>
     </form>
