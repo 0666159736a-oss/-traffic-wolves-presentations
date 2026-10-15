@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react'
-import { config, formOptions } from '../content/site.js'
+import { config } from '../content/site.js'
 import { submitLead } from '../lib/integrations.js'
 import { useNav } from '../lib/nav.jsx'
-import { Choice, EMAIL_RE, Field, PHONE_RE } from './Form.jsx'
-import { ArrowRight, Calendar, Check } from './Icons.jsx'
-
-const EMPTY = { name: '', email: '', phone: '', role: '', interest: '', consent: false }
+import ContactFields, { EMPTY_CONTACT, contactPayload, validateContact } from './ContactFields.jsx'
+import { ArrowRight, Calendar, Check, Chat } from './Icons.jsx'
 
 export function Consent({ id, checked, onChange, error }) {
   return (
@@ -23,84 +21,75 @@ export function Consent({ id, checked, onChange, error }) {
   )
 }
 
-/** Small marker shown on confirmation screens while no backend is connected (same wording as the reference site). */
-export function PrototypeNote({ children = 'Prototype preview: no request is sent.' }) {
-  return <p className="font-mono text-[11.5px] uppercase tracking-wider text-muted">{children}</p>
+/** Shown when no lead handler is configured: nothing is faked, the entered details stay in the form. */
+export function NotSent({ onBack }) {
+  const { open } = useNav()
+  return (
+    <div role="alert" className="flex flex-col items-start gap-3 rounded-2xl border border-warn/50 bg-warn/[.07] p-4 animate-rise">
+      <span className="font-mono text-[11.5px] font-bold uppercase tracking-wider text-warn">Not sent · preview mode</span>
+      <p className="text-[15px] leading-relaxed">The lead inbox isn’t connected in this preview, so your request was not delivered. Your details are still in the form.</p>
+      <div className="flex flex-wrap gap-2">
+        <button type="button" className="btn btn-ghost !min-h-[42px]" onClick={onBack}>Back to form</button>
+        <button type="button" className="btn btn-ghost !min-h-[42px]" onClick={() => open('manager')}><Chat /> Contact a manager</button>
+      </div>
+    </div>
+  )
 }
 
-export default function LeadForm({ idPrefix, compact = false }) {
-  const { preset, open } = useNav()
-  const [v, setV] = useState(EMPTY)
+/** Hook shared by all client forms: contact state, validation, submit. */
+export function useContactForm(send) {
+  const [v, setV] = useState(EMPTY_CONTACT)
   const [errors, setErrors] = useState({})
-  const [state, setState] = useState('idle') // idle | sending | sent | prototype
-  const id = (k) => `${idPrefix}-${k}`
-
-  useEffect(() => { if (preset) setV((x) => ({ ...x, interest: preset.value })) }, [preset])
-
+  const [state, setState] = useState('idle') // idle | sending | sent | not-connected
   const set = (k) => (val) => {
-    setV((x) => ({ ...x, [k]: val?.target ? val.target.value : val }))
-    if (errors[k]) setErrors((e) => ({ ...e, [k]: undefined }))
+    setV((x) => ({ ...x, [k]: val?.target ? (val.target.type === 'checkbox' ? val.target.checked : val.target.value) : val }))
+    setErrors((e) => (e[k] ? { ...e, [k]: undefined } : e))
   }
-  const inv = (k) => ({ 'aria-invalid': !!errors[k], 'aria-describedby': errors[k] ? `${id(k)}-err` : undefined })
-
-  const submit = async (ev) => {
-    ev.preventDefault()
-    const e = {}
-    if (v.name.trim().length < 2) e.name = 'Enter your name.'
-    if (!EMAIL_RE.test(v.email.trim())) e.email = 'Enter a valid email, like you@label.com.'
-    if (!PHONE_RE.test(v.phone.trim())) e.phone = 'Enter a number with country code, like +1 310 555 0100.'
-    if (!v.role) e.role = 'Choose one.'
-    if (!v.interest) e.interest = 'Choose one. “Not Sure” is fine.'
-    if (!v.consent) e.consent = 'Please confirm so we can contact you.'
+  const submit = (prefix, extra = {}) => async (ev) => {
+    ev?.preventDefault()
+    const e = validateContact(v)
     setErrors(e)
-    if (Object.keys(e).length) { requestAnimationFrame(() => document.getElementById(id(Object.keys(e)[0]))?.focus()); return }
+    if (Object.keys(e).length) { requestAnimationFrame(() => document.getElementById(`${prefix}-${Object.keys(e)[0]}`)?.focus()); return }
     setState('sending')
-    const r = await submitLead({ name: v.name, email: v.email, phone: v.phone, role: v.role, interest: v.interest, consent: true, form: idPrefix })
+    const r = await send({ ...contactPayload(v), ...extra })
     if (r.status === 'error') { setErrors({ form: r.error }); setState('idle'); return }
     setState(r.status)
   }
+  return { v, setV, set, errors, state, setState, submit }
+}
 
-  if (state === 'sent' || state === 'prototype') {
+export default function LeadForm({ idPrefix }) {
+  const { preset, open } = useNav()
+  const [service, setService] = useState('')
+  const f = useContactForm(submitLead)
+  useEffect(() => { if (preset) setService(preset.value) }, [preset])
+
+  if (f.state === 'sent') {
     return (
       <div className="flex flex-col items-start gap-4 animate-rise">
         <span className="grid size-12 place-items-center rounded-full bg-lemon text-[#14120a]"><Check className="size-6" /></span>
-        <h3 className="display text-[clamp(26px,4vw,40px)]">Thanks, {v.name.split(' ')[0]}. <span className="text-lemon">We got it.</span></h3>
-        <p className="max-w-lg text-muted">A manager will reach out at {v.email}. Want to skip the wait? Pick a time for a strategy session.</p>
-        <div className="flex flex-wrap gap-3">
-          <button type="button" className="btn btn-primary" onClick={() => open('session')}><Calendar /> Book a strategy session</button>
-          <button type="button" className="btn btn-ghost" onClick={() => { setV(EMPTY); setState('idle') }}>Send another</button>
-        </div>
-        {state === 'prototype' && <PrototypeNote />}
+        <h3 className="display text-[clamp(26px,4vw,40px)]">Thanks, {f.v.name.split(' ')[0]}. <span className="text-lemon">We got it.</span></h3>
+        <p className="max-w-lg text-muted">A manager will reach out by phone, WhatsApp or email. Want to skip the wait? Book a strategy session.</p>
+        <button type="button" className="btn btn-primary" onClick={() => open('session')}><Calendar /> Book a strategy session</button>
       </div>
     )
   }
 
   return (
-    <form noValidate onSubmit={submit} className="flex flex-col gap-5">
-      <div className={`grid gap-4 ${compact ? 'sm:grid-cols-3' : 'sm:grid-cols-2 lg:grid-cols-3'}`}>
-        <Field id={id('name')} label="Name" error={errors.name}>
-          <input id={id('name')} className="field" autoComplete="name" value={v.name} onChange={set('name')} placeholder="Your name" {...inv('name')} />
-        </Field>
-        <Field id={id('email')} label="Email" error={errors.email}>
-          <input id={id('email')} type="email" inputMode="email" className="field" autoComplete="email" value={v.email} onChange={set('email')} placeholder="you@label.com" {...inv('email')} />
-        </Field>
-        <Field id={id('phone')} label="WhatsApp / Phone" error={errors.phone}>
-          <input id={id('phone')} type="tel" inputMode="tel" className="field" autoComplete="tel" value={v.phone} onChange={set('phone')} placeholder="+1 310 555 0100" {...inv('phone')} />
-        </Field>
-      </div>
-      <div className="grid gap-4 lg:grid-cols-[auto_1fr] lg:gap-8">
-        <Field id={id('role')} label="I am" error={errors.role}>
-          <Choice id={id('role')} options={formOptions.roles} value={v.role} onChange={set('role')} error={errors.role} />
-        </Field>
-        <Field id={id('interest')} label="What are you looking for?" error={errors.interest}>
-          <Choice id={id('interest')} options={formOptions.interests} value={v.interest} onChange={set('interest')} error={errors.interest} />
-        </Field>
-      </div>
-      {errors.form && <p className="text-[14px] text-bad" role="alert">{errors.form}</p>}
+    <form noValidate onSubmit={f.submit(idPrefix, { form: idPrefix, service: service || undefined })} className="flex flex-col gap-5">
+      {service && (
+        <div className="flex flex-wrap items-center gap-2 text-[14px] text-muted">
+          You picked: <span className="rounded-full border border-line px-3 py-1 text-lemon">{service}</span>
+          <button type="button" className="underline underline-offset-4 hover:text-cream" onClick={() => setService('')}>Clear</button>
+        </div>
+      )}
+      <ContactFields prefix={idPrefix} v={f.v} set={f.set} errors={f.errors} layout="wide" />
+      {f.errors.form && <p className="text-[14px] text-bad" role="alert">{f.errors.form}</p>}
+      {f.state === 'not-connected' && <NotSent onBack={() => f.setState('idle')} />}
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <Consent id={id('consent')} checked={v.consent} onChange={set('consent')} error={errors.consent} />
-        <button type="submit" className="btn btn-primary !min-h-[54px] shrink-0 lg:min-w-[220px]" disabled={state === 'sending'}>
-          {state === 'sending' ? 'Sending…' : <>Get my plan <ArrowRight /></>}
+        <Consent id={`${idPrefix}-consent`} checked={f.v.consent} onChange={f.set('consent')} error={f.errors.consent} />
+        <button type="submit" className="btn btn-primary !min-h-[54px] shrink-0 lg:min-w-[220px]" disabled={f.state === 'sending'}>
+          {f.state === 'sending' ? 'Sending…' : <>Get my plan <ArrowRight /></>}
         </button>
       </div>
     </form>

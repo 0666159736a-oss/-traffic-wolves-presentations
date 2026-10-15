@@ -59,16 +59,36 @@ Cases from the Traffic Wolves team use `attribution: 'team'` and are labelled "T
 
 ## Integrations
 
-All network calls go through `src/lib/integrations.js`. This build is a **prototype for the design/dev team**:
-with no endpoint configured, every form and button runs its full intended flow and the confirmation
-screens carry a small "Prototype preview" note. Nothing is sent anywhere.
+All network calls go through `src/lib/integrations.js`. Every client form (top form, bottom form,
+Get a Free Presentation, Contact a Manager, Book a Strategy Session) collects the same fields:
+**Name, Email, Phone / WhatsApp (country code + number, required), Instagram / TikTok profile link, I Am**
+(Artist / Record Label / Agency / Other) and consent. Each request is POSTed as JSON:
+
+```json
+{ "type": "lead | presentation | callback | session", "name": "…", "email": "…",
+  "phone": "+44 7700 900123", "social": "https://instagram.com/…", "role": "Record Label",
+  "consent": true, "service": "Personal SMM Manager (only if picked on a service card)",
+  "source": "lemon-clips-site", "page": "…", "submittedAt": "…" }
+```
+
+With no endpoint configured nothing is faked: the visitor sees "Not sent · preview mode" and keeps
+everything they typed.
 
 | Setting (`site.js`)   | Effect |
 | --------------------- | ------ |
-| `leadWebhookUrl`      | Both lead forms (`type: 'lead'`) and presentation requests (`type: 'presentation'`) are POSTed here as JSON. Point it at your CRM / Make / Zapier / n8n. |
-| `presentationPdfUrl`  | Sent along with presentation requests so your email automation (Mailchimp, Resend, HubSpot workflow…) can email the PDF. |
-| `whatsapp`, `telegram`, `email` | Channels shown in **Contact a Manager**. Empty channels are hidden. |
-| `calendarUrl`         | Calendly or Cal.com link. **Book a Personal Strategy Session** embeds the real scheduler; a new-tab link is the fallback. |
+| `leadWebhookUrl`      | Receives every client request above (CRM / Make / Zapier / n8n / your API). |
+| `presentationPdfUrl`  | Sent with `type: 'presentation'` so the email automation can send the PDF. |
+| `calendarUrl`         | Calendly or Cal.com event link. Step 2 of the booking dialog embeds it with real free slots. |
+| `whatsapp`, `telegram`, `email` | Real manager channels shown above the callback form in Contact a Manager. |
 | `clipperWebhookUrl`   | Clipper applications (falls back to `leadWebhookUrl`). |
 | `privacyUrl`          | Linked from the consent checkbox. |
-| `platformUrl`, `clipperAppUrl` | Self-service platform and clipper app links. |
+
+### Calendar setup (required fields)
+
+The booking dialog first collects the contact fields (and posts them as `type: 'session'`, so phone and
+social are never lost), then opens the calendar prefilled:
+
+* **Calendly**: Event type → Invitee questions. Add, in this order: Q1 *Phone / WhatsApp* (phone, required),
+  Q2 *Instagram / TikTok Profile* (required), Q3 *I Am* (required). They are prefilled via `a1`, `a2`, `a3`.
+* **Cal.com**: Event type → Advanced → Booking questions. Add questions with identifiers `phone`
+  (Phone, required), `social` (Short text, required) and `role` (Select: Artist, Record Label, Agency, Other).

@@ -3,13 +3,13 @@
 // Configure endpoints in content/site.js, or replace the bodies with an SDK
 // (HubSpot, Salesforce, Resend, Mailchimp…). Every function resolves to:
 //   { status: 'sent' }            the endpoint accepted the request
-//   { status: 'prototype' }       no endpoint configured — the UI shows the intended flow, nothing is sent
+//   { status: 'not-connected' }   no endpoint configured — nothing was sent, and the UI says so
 //   { status: 'error', error }    the endpoint failed
 // ─────────────────────────────────────────────────────────────
 import { config } from '../content/site.js'
 
 async function post(url, payload) {
-  if (!url) return new Promise((r) => setTimeout(() => r({ status: 'prototype' }), 600))
+  if (!url) return { status: 'not-connected' }
   try {
     const res = await fetch(url, {
       method: 'POST',
@@ -32,6 +32,12 @@ export const submitLead = (lead) => post(config.leadWebhookUrl, { type: 'lead', 
 export const requestPresentation = (req) =>
   post(config.leadWebhookUrl, { type: 'presentation', pdf: config.presentationPdfUrl || undefined, ...req })
 
+/** Contact-a-manager callback request. */
+export const requestCallback = (req) => post(config.leadWebhookUrl, { type: 'callback', ...req })
+
+/** Contact details captured before the booking calendar opens (phone + social are kept even if the calendar doesn't ask). */
+export const submitSessionContact = (req) => post(config.leadWebhookUrl, { type: 'session', ...req })
+
 /** Clipper / clipping-team application. */
 export const submitClipperApplication = (app) =>
   post(config.clipperWebhookUrl || config.leadWebhookUrl, { type: 'clipper', ...app })
@@ -45,14 +51,25 @@ export function managerChannels() {
   return out
 }
 
-/** Calendly / Cal.com embed URL for the inline scheduler. */
-export function calendarEmbedUrl() {
+/**
+ * Calendly / Cal.com embed URL, prefilled with the contact details the visitor already entered.
+ * Calendly: name, email, and custom questions a1 (phone) / a2 (social) / a3 (I am) — create them in that order.
+ * Cal.com: name, email, plus booking questions with identifiers phone, social and role.
+ */
+export function calendarEmbedUrl(contact) {
   const u = config.calendarUrl
   if (!u) return ''
   try {
     const url = new URL(u)
-    if (url.hostname.includes('calendly.com')) { url.searchParams.set('hide_gdpr_banner', '1'); url.searchParams.set('background_color', '100f0b'); url.searchParams.set('text_color', 'f6f3ea'); url.searchParams.set('primary_color', 'f6d23c') }
-    if (url.hostname.includes('cal.com')) { url.searchParams.set('embed', 'true'); url.searchParams.set('theme', 'dark') }
+    const set = (k, v) => v && url.searchParams.set(k, v)
+    if (url.hostname.includes('calendly.com')) {
+      set('hide_gdpr_banner', '1'); set('background_color', '100f0b'); set('text_color', 'f6f3ea'); set('primary_color', 'f6d23c')
+      if (contact) { set('name', contact.name); set('email', contact.email); set('a1', contact.phone); set('a2', contact.social); set('a3', contact.role) }
+    }
+    if (url.hostname.includes('cal.com')) {
+      set('embed', 'true'); set('theme', 'dark')
+      if (contact) { set('name', contact.name); set('email', contact.email); set('phone', contact.phone); set('social', contact.social); set('role', contact.role) }
+    }
     return url.toString()
   } catch { return '' }
 }

@@ -1,3 +1,4 @@
+import { guarantee } from '../content/site.js'
 import { useCountUp, useInView } from '../lib/hooks.js'
 import { Lemon, LemonSlice } from './Lemon.jsx'
 
@@ -23,7 +24,7 @@ export function GuaranteeBadge() {
           <MillionCounter size="text-[clamp(30px,4.2vw,44px)]" />
           <span className="text-[13px] font-black uppercase tracking-[.12em] text-cream">Guaranteed views</span>
         </div>
-        <p className="text-[13.5px] text-muted">Available with select promotion packages.</p>
+        <p className="text-[13.5px] text-muted"><span className="text-cream">{guarantee.scope}</span> {guarantee.terms}</p>
       </div>
       <LemonSlice className="pointer-events-none absolute -right-6 -top-6 size-20 opacity-15" />
     </div>

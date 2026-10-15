@@ -4,7 +4,7 @@ import { campaignFields, clipperFormOptions, clipperHero, earnSteps, joinSteps, 
 import { submitClipperApplication } from '../lib/integrations.js'
 import { scrollToId, useNav } from '../lib/nav.jsx'
 import { Choice, EMAIL_RE, Field } from '../components/Form.jsx'
-import { Consent, PrototypeNote } from '../components/LeadForm.jsx'
+import { Consent, NotSent } from '../components/LeadForm.jsx'
 import { ArrowRight, ArrowUpRight, Check, Music, Users, Wallet } from '../components/Icons.jsx'
 
 const Section = ({ id, n, eyebrow, title, children }) => (
@@ -72,13 +72,12 @@ function JoinForm({ type, setType }) {
     setState(r.status)
   }
 
-  if (state === 'sent' || state === 'prototype') {
+  if (state === 'sent') {
     return (
       <div className="flex flex-col items-start gap-4 p-6 sm:p-10">
         <span className="grid size-12 place-items-center rounded-full bg-lemon text-[#14120a]"><Check className="size-6" /></span>
         <h3 className="display text-[clamp(26px,4vw,40px)]">Application received.</h3>
         <p className="max-w-md text-muted">We’ll review your accounts and email you at {v.email} with access to live campaigns.</p>
-        {state === 'prototype' && <PrototypeNote />}
       </div>
     )
   }
@@ -98,6 +97,7 @@ function JoinForm({ type, setType }) {
       </Field></div>
       <div className="sm:col-span-2"><Consent id="cconsent" checked={v.consent} onChange={set('consent')} error={err.cconsent} /></div>
       {err.form && <p className="text-bad text-[14px] sm:col-span-2" role="alert">{err.form}</p>}
+      {state === 'not-connected' && <div className="sm:col-span-2"><NotSent onBack={() => setState('idle')} /></div>}
       <button type="submit" className="btn btn-primary sm:col-span-2" disabled={state === 'sending'}>{state === 'sending' ? 'Sending…' : <>Apply to join <ArrowRight /></>}</button>
     </form>
   )

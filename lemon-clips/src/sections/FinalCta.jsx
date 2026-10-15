@@ -1,4 +1,5 @@
 import Actions from '../components/Actions.jsx'
+import { guarantee } from '../content/site.js'
 import { MillionCounter } from '../components/Guarantee.jsx'
 import { Lemon, LemonSlice } from '../components/Lemon.jsx'
 
@@ -18,8 +19,9 @@ export default function FinalCta() {
             <MillionCounter size="text-[clamp(52px,11vw,140px)]" />
             <Lemon className="hidden size-20 sm:block" anim="bob" style={{ animationDelay: '-3s', scale: '-1 1' }} />
           </div>
-          <h3 className="display -mt-2 text-[clamp(22px,3.4vw,40px)] text-lemon">GUARANTEED VIEWS.</h3>
-          <p className="max-w-xl text-[15px] text-muted">Eligible campaigns only. Scope, timeframe and guarantee conditions are agreed before launch.</p>
+          <h3 className="display -mt-2 text-[clamp(22px,3.4vw,40px)] text-lemon">GUARANTEED VIEWS</h3>
+          <p className="display text-[clamp(16px,2.2vw,24px)]">WITH OUR FULL-SERVICE PACKAGE.</p>
+          <p className="max-w-xl text-[15px] text-muted">{guarantee.terms} Available with Full-Service SMM &amp; Clipping only.</p>
           <p className="max-w-xl text-[clamp(17px,2vw,20px)] text-cream/85">Let’s build the right promotion strategy for your next release.</p>
           <Actions className="mt-2 w-full max-w-4xl" />
         </div>

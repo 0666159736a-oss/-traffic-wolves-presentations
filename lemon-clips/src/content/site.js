@@ -51,31 +51,36 @@ export const services = [
   {
     id: 'clipping',
     name: 'Clipping Campaigns',
-    formValue: 'Clipping',
-    tagline: 'Scale your music through creator-made videos across TikTok, Reels and Shorts.',
-    points: ['Launch yourself on the platform', 'Start with a test campaign', 'Scale the videos that work'],
+    tagline: 'Mass distribution of short-form videos through a network of creators across TikTok, Instagram Reels and YouTube Shorts.',
+    text: 'Clippers create and publish videos with your music on their own accounts, putting it in front of many different audiences.',
+    points: ['Creator network distribution', 'TikTok, Reels & Shorts', 'Test campaign available'],
     cta: 'Get Started',
   },
   {
-    id: 'managed',
-    name: 'Managed Promotion',
-    formValue: 'Managed Promotion',
-    tagline: 'Your campaign, handled by a dedicated manager.',
-    guarantee: true,
-    points: ['Personal campaign manager', 'Clipper selection & coordination', 'Publishing control', 'Results reporting'],
-    cta: 'Get Started',
+    id: 'smm-manager',
+    name: 'Personal SMM Manager',
+    tagline: 'Your personal manager. Your content. Your social media growth.',
+    text: 'A dedicated SMM manager takes care of your social media presence: turning your existing footage into engaging short-form videos, planning content, managing posts and developing your artist profile.',
+    points: ['Dedicated SMM Manager', 'Short-Form Video Editing', 'Content Planning', 'Social Media Management', 'Profile Growth & Optimization', 'Performance Reporting'],
+    cta: 'Get Your Personal Manager',
   },
   {
-    id: 'smm',
-    name: 'Full-Service SMM & Music Promotion',
-    formValue: 'Full-Service SMM',
-    tagline: 'We manage your content, social media presence and growth strategy.',
-    guarantee: true,
-    points: ['Content strategy & content plan', 'Short-form video production & editing', 'Posting and social media management', 'Personal manager', 'Extra reach through clipping'],
-    cta: 'Get Started',
+    id: 'full',
+    name: 'Full-Service SMM & Clipping',
+    tagline: 'Complete social media management. Creator-powered distribution. Guaranteed reach.',
+    text: 'We combine dedicated SMM management, content strategy, short-form video production and large-scale creator distribution to grow your artist brand and amplify your music.',
+    points: ['Dedicated SMM Manager', 'Full Content Strategy', 'Content Planning & Video Editing', 'Social Media Management', 'Creator Network Distribution', 'Campaign Management & Reporting', '1,000,000 Guaranteed Views'],
+    cta: 'Get Full-Service Promotion',
     featured: true,
+    guarantee: true,
   },
 ]
+
+export const guarantee = {
+  label: '1,000,000 guaranteed views',
+  scope: 'With our Full-Service package.',
+  terms: 'Subject to agreed campaign terms.',
+}
 
 export const howItWorks = {
   title: ['ONE VIDEO. HUNDREDS OF CLIPS.', 'MILLIONS OF VIEWS.'],
@@ -86,7 +91,7 @@ export const howItWorks = {
     { tag: 'Creator network', title: 'Creators Distribute at Scale', text: 'Multiple creators publish across TikTok, Instagram Reels and YouTube Shorts, putting your music in front of new audiences.' },
     { tag: 'Views & results', title: 'We Track & Scale', text: 'We monitor views and performance, find the formats that work and scale distribution.' },
   ],
-  fromScratch: 'No footage yet? With Full-Service SMM we create content from scratch.',
+  fromScratch: 'No footage yet? With Full-Service SMM & Clipping we create content from scratch.',
 }
 
 export const why = {
@@ -109,7 +114,7 @@ export const faq = [
   },
   {
     q: 'What services do you offer?',
-    a: 'Clipping Campaigns for mass short-form distribution, Managed Promotion with a dedicated manager, and Full-Service SMM & Music Promotion: strategy, content plan, video production, social media management and extra reach through clipping.',
+    a: 'Clipping Campaigns for mass distribution through creators, a Personal SMM Manager who runs and grows your own accounts, and Full-Service SMM & Clipping, which combines both and includes our 1,000,000 views guarantee on agreed terms.',
   },
   {
     q: 'Can I start with a test campaign?',
@@ -117,7 +122,7 @@ export const faq = [
   },
   {
     q: 'Do I get a dedicated manager?',
-    a: 'Managed Promotion and Full-Service SMM include a personal manager. Clipping Campaigns can be run on your own through the platform.',
+    a: 'Yes, with Personal SMM Manager and Full-Service SMM & Clipping. Your manager works directly on your own accounts. Clipping Campaigns are coordinated by our team.',
   },
   {
     q: 'How do I get started?',
@@ -126,8 +131,7 @@ export const faq = [
 ]
 
 export const formOptions = {
-  roles: ['Artist', 'Label', 'Agency', 'Other'],
-  interests: ['Clipping', 'Managed Promotion', 'Full-Service SMM', 'Not Sure'],
+  roles: ['Artist', 'Record Label', 'Agency', 'Other'],
 }
 
 export const nav = [
