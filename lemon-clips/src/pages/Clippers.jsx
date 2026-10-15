@@ -4,7 +4,7 @@ import { campaignFields, clipperFormOptions, clipperHero, earnSteps, joinSteps, 
 import { submitClipperApplication } from '../lib/integrations.js'
 import { scrollToId, useNav } from '../lib/nav.jsx'
 import { Choice, EMAIL_RE, Field } from '../components/Form.jsx'
-import { Consent, NotConnected } from '../components/LeadForm.jsx'
+import { Consent, PrototypeNote } from '../components/LeadForm.jsx'
 import { ArrowRight, ArrowUpRight, Check, Music, Users, Wallet } from '../components/Icons.jsx'
 
 const Section = ({ id, n, eyebrow, title, children }) => (
@@ -72,13 +72,13 @@ function JoinForm({ type, setType }) {
     setState(r.status)
   }
 
-  if (state === 'not-connected') return <div className="p-6 sm:p-10"><NotConnected what="application" onBack={() => setState('idle')} /></div>
-  if (state === 'sent') {
+  if (state === 'sent' || state === 'prototype') {
     return (
       <div className="flex flex-col items-start gap-4 p-6 sm:p-10">
         <span className="grid size-12 place-items-center rounded-full bg-lemon text-[#14120a]"><Check className="size-6" /></span>
         <h3 className="display text-[clamp(26px,4vw,40px)]">Application received.</h3>
         <p className="max-w-md text-muted">We’ll review your accounts and email you at {v.email} with access to live campaigns.</p>
+        {state === 'prototype' && <PrototypeNote />}
       </div>
     )
   }

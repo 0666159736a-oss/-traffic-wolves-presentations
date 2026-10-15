@@ -3,7 +3,7 @@ import { config, formOptions } from '../content/site.js'
 import { submitLead } from '../lib/integrations.js'
 import { useNav } from '../lib/nav.jsx'
 import { Choice, EMAIL_RE, Field, PHONE_RE } from './Form.jsx'
-import { ArrowRight, Calendar, Chat, Check } from './Icons.jsx'
+import { ArrowRight, Calendar, Check } from './Icons.jsx'
 
 const EMPTY = { name: '', email: '', phone: '', role: '', interest: '', consent: false }
 
@@ -23,27 +23,16 @@ export function Consent({ id, checked, onChange, error }) {
   )
 }
 
-/** Shown when no endpoint is configured: honest, and still offers the next step. */
-export function NotConnected({ onBack, what = 'request' }) {
-  const { open } = useNav()
-  return (
-    <div className="flex flex-col items-start gap-4 animate-rise">
-      <span className="rounded-md border border-warn/50 bg-warn/10 px-2.5 py-1 font-mono text-[11px] font-bold uppercase tracking-wider text-warn">Not sent</span>
-      <h3 className="display text-[clamp(24px,3.4vw,34px)]">This form isn’t connected yet.</h3>
-      <p className="max-w-lg text-[15.5px] leading-relaxed text-muted">Your details are valid, but this preview has no lead inbox configured, so your {what} was not delivered. Reach a manager directly instead.</p>
-      <div className="flex flex-wrap gap-3">
-        <button type="button" className="btn btn-primary" onClick={() => open('manager')}><Chat /> Contact a manager</button>
-        <button type="button" className="btn btn-ghost" onClick={onBack}>Back to form</button>
-      </div>
-    </div>
-  )
+/** Small marker shown on confirmation screens while no backend is connected (same wording as the reference site). */
+export function PrototypeNote({ children = 'Prototype preview: no request is sent.' }) {
+  return <p className="font-mono text-[11.5px] uppercase tracking-wider text-muted">{children}</p>
 }
 
 export default function LeadForm({ idPrefix, compact = false }) {
   const { preset, open } = useNav()
   const [v, setV] = useState(EMPTY)
   const [errors, setErrors] = useState({})
-  const [state, setState] = useState('idle') // idle | sending | sent | not-connected
+  const [state, setState] = useState('idle') // idle | sending | sent | prototype
   const id = (k) => `${idPrefix}-${k}`
 
   useEffect(() => { if (preset) setV((x) => ({ ...x, interest: preset.value })) }, [preset])
@@ -71,9 +60,7 @@ export default function LeadForm({ idPrefix, compact = false }) {
     setState(r.status)
   }
 
-  if (state === 'not-connected') return <NotConnected onBack={() => setState('idle')} />
-
-  if (state === 'sent') {
+  if (state === 'sent' || state === 'prototype') {
     return (
       <div className="flex flex-col items-start gap-4 animate-rise">
         <span className="grid size-12 place-items-center rounded-full bg-lemon text-[#14120a]"><Check className="size-6" /></span>
@@ -83,6 +70,7 @@ export default function LeadForm({ idPrefix, compact = false }) {
           <button type="button" className="btn btn-primary" onClick={() => open('session')}><Calendar /> Book a strategy session</button>
           <button type="button" className="btn btn-ghost" onClick={() => { setV(EMPTY); setState('idle') }}>Send another</button>
         </div>
+        {state === 'prototype' && <PrototypeNote />}
       </div>
     )
   }

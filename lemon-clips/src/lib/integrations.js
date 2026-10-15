@@ -3,13 +3,13 @@
 // Configure endpoints in content/site.js, or replace the bodies with an SDK
 // (HubSpot, Salesforce, Resend, Mailchimp…). Every function resolves to:
 //   { status: 'sent' }            the endpoint accepted the request
-//   { status: 'not-connected' }   no endpoint configured — nothing was sent
+//   { status: 'prototype' }       no endpoint configured — the UI shows the intended flow, nothing is sent
 //   { status: 'error', error }    the endpoint failed
 // ─────────────────────────────────────────────────────────────
 import { config } from '../content/site.js'
 
 async function post(url, payload) {
-  if (!url) return { status: 'not-connected' }
+  if (!url) return new Promise((r) => setTimeout(() => r({ status: 'prototype' }), 600))
   try {
     const res = await fetch(url, {
       method: 'POST',

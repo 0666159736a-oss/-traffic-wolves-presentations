@@ -41,7 +41,8 @@ npm run build:single  # one self-contained HTML file → ../lemon-clips.html (Gi
 
 Home: Hero (3 actions) → short lead form → Results* → Services → How it works + advantages →
 Client feedback* → FAQ → final block (3 actions) → short lead form.
-`*` renders only when `cases.js` / `testimonials.js` contain real entries. No placeholders are shown.
+Cases (5) and client feedback (8) were transferred from the Traffic Wolves site and are labelled as Traffic Wolves team results.
+Images were cut from screenshots of that site (`public/media`); replace them with the original files and add `videoUrl` for moving previews.
 
 ## Editing content
 
@@ -58,8 +59,9 @@ Cases from the Traffic Wolves team use `attribution: 'team'` and are labelled "T
 
 ## Integrations
 
-All network calls go through `src/lib/integrations.js`. With no endpoint configured, forms validate
-but tell the visitor plainly that nothing was sent. The site never fakes a successful submission.
+All network calls go through `src/lib/integrations.js`. This build is a **prototype for the design/dev team**:
+with no endpoint configured, every form and button runs its full intended flow and the confirmation
+screens carry a small "Prototype preview" note. Nothing is sent anywhere.
 
 | Setting (`site.js`)   | Effect |
 | --------------------- | ------ |

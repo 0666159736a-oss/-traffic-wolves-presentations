@@ -1,6 +1,6 @@
 import { hero, heroMedia } from '../content/site.js'
 import Actions from '../components/Actions.jsx'
-import Video from '../components/Video.jsx'
+import Clip from '../components/Clip.jsx'
 
 const ORBIT = ['TikTok', 'Instagram Reels', 'YouTube Shorts', 'Creator network', 'SMM', 'Dedicated manager']
 
@@ -37,16 +37,29 @@ function Orbit() {
   )
 }
 
-/** Real clips, when supplied. */
-function MediaGrid() {
-  const items = heroMedia.slice(0, 5)
+/** Real campaign clips, fanned. */
+function MediaFan() {
+  const items = heroMedia.slice(0, 3)
+  const pose = [
+    { rot: -9, x: '-58%', y: '8%', z: 1, delay: '-2s' },
+    { rot: 0, x: '0%', y: '0%', z: 3, delay: '0s' },
+    { rot: 9, x: '58%', y: '8%', z: 2, delay: '-4s' },
+  ]
   return (
-    <div className="grid grid-cols-3 items-center gap-2.5 sm:gap-3">
+    <div className="relative mx-auto aspect-[1/1.05] w-full max-w-[460px]" aria-label="Clips from real campaigns by the Traffic Wolves team" role="img">
+      <div className="absolute inset-0 rounded-full" style={{ background: 'radial-gradient(circle, rgb(246 210 60 / .22), transparent 65%)' }} />
       {items.map((m, i) => (
-        <div key={i} className={`animate-rise ${i % 2 ? 'translate-y-6' : ''}`} style={{ animationDelay: `${i * 120}ms` }}>
-          <Video src={m.videoUrl} poster={m.poster} label={m.caption} className="aspect-[9/16] rounded-2xl border border-line" />
+        <div key={i} className="absolute left-1/2 top-[6%] w-[44%] -translate-x-1/2" style={{ zIndex: pose[i].z }}>
+          <div className="animate-float" style={{ animationDelay: pose[i].delay }}>
+            <div className="animate-rise" style={{ animationDelay: `${i * 120}ms`, translate: `${pose[i].x} ${pose[i].y}`, rotate: `${pose[i].rot}deg` }}>
+              <Clip src={m.src} videoUrl={m.videoUrl} views={m.views} sizes="text-[12px] sm:text-[13px]" className="aspect-[9/15] shadow-[0_30px_60px_-20px_#000] ring-1 ring-lemon/30" />
+            </div>
+          </div>
         </div>
       ))}
+      <div className="absolute bottom-[4%] left-1/2 z-10 w-max -translate-x-1/2 rounded-full border border-line bg-ink/90 px-3.5 py-1.5 text-[12px] font-semibold backdrop-blur">
+        <span className="text-lemon">Real campaign clips</span> · Traffic Wolves team
+      </div>
     </div>
   )
 }
@@ -66,7 +79,7 @@ export default function Hero() {
             <p className="max-w-[36rem] text-[clamp(18px,2vw,22px)] leading-[1.45] text-cream/85">{hero.subtitle}</p>
           </div>
           <div className="mx-auto w-full max-w-[300px] sm:max-w-[400px] lg:max-w-none">
-            {heroMedia.length ? <MediaGrid /> : <Orbit />}
+            {heroMedia.length ? <MediaFan /> : <Orbit />}
           </div>
         </div>
         <Actions />

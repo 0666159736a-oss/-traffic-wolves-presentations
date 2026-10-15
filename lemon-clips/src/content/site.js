@@ -38,9 +38,12 @@ export const hero = {
   subtitle: 'Music promotion, creator-powered campaigns and full-service SMM for artists, labels and agencies.',
 }
 
-// Real short-form clips for the hero video grid: { videoUrl, poster, caption }.
-// Leave empty until original files are supplied; the hero then shows the brand graphic.
-export const heroMedia = []
+// Real campaign clips shown in the hero (from the cases). Add videoUrl for a moving preview.
+export const heroMedia = [
+  { src: 'media/cases/music-1.jpg', views: '1.2M', caption: 'Music' },
+  { src: 'media/cases/music-3.jpg', views: '3.6M', caption: 'Music' },
+  { src: 'media/cases/podcast-2.jpg', views: '1.8M', caption: 'Podcast' },
+]
 
 export const services = [
   {
@@ -118,7 +121,7 @@ export const formOptions = {
 
 export const nav = [
   { label: 'Home', to: 'top' },
-  { label: 'Results', to: 'results', needs: 'cases' },
+  { label: 'Results', to: 'results' },
   { label: 'Services', to: 'services' },
   { label: 'How It Works', to: 'how' },
   { label: 'For Clippers', to: 'clippers' },
