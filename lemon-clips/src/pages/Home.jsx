@@ -1,11 +1,13 @@
 import Hero from '../sections/Hero.jsx'
 import QuickForm from '../sections/QuickForm.jsx'
 import Results from '../sections/Results.jsx'
-import Services from '../sections/Services.jsx'
 import HowItWorks from '../sections/HowItWorks.jsx'
+import Why from '../sections/Why.jsx'
+import Services from '../sections/Services.jsx'
 import Testimonials from '../sections/Testimonials.jsx'
 import Faq from '../sections/Faq.jsx'
 import FinalCta from '../sections/FinalCta.jsx'
+import { LemonDivider } from '../components/Lemon.jsx'
 
 export default function Home() {
   return (
@@ -13,8 +15,10 @@ export default function Home() {
       <Hero />
       <QuickForm id="get-started" idPrefix="top" />
       <Results />
-      <Services />
+      <LemonDivider />
       <HowItWorks />
+      <Why />
+      <Services />
       <Testimonials />
       <Faq />
       <FinalCta />

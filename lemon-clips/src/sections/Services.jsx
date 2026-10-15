@@ -1,6 +1,7 @@
 import { config, services } from '../content/site.js'
 import { useNav } from '../lib/nav.jsx'
 import { ArrowRight, ArrowUpRight, Check } from '../components/Icons.jsx'
+import { Lemon } from '../components/Lemon.jsx'
 
 export default function Services() {
   const { go, choosePreset } = useNav()
@@ -24,6 +25,15 @@ export default function Services() {
                 <h3 className="display text-[clamp(26px,2.6vw,32px)]">{s.name}</h3>
                 <p className="text-[16.5px] leading-snug text-cream/85">{s.tagline}</p>
               </div>
+              {s.guarantee && (
+                <div className="flex items-start gap-3 rounded-2xl border border-lemon/50 bg-lemon/[.07] p-3">
+                  <Lemon className="size-9 shrink-0" anim="sway" />
+                  <div>
+                    <div className="text-[14.5px] font-black uppercase tracking-wide text-lemon">1M Views Guarantee Available</div>
+                    <div className="text-[13px] leading-snug text-muted">Dedicated campaign management, creator distribution and measurable results.</div>
+                  </div>
+                </div>
+              )}
               <ul className="flex flex-col gap-2.5 border-t border-hair pt-5 text-[15px]">
                 {s.points.map((p) => <li key={p} className="flex gap-2.5"><Check className="mt-0.5 size-[18px] shrink-0 text-lemon" />{p}</li>)}
               </ul>

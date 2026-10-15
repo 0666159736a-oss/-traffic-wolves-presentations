@@ -1,3 +1,5 @@
+import { media } from './media.js'
+
 // ─────────────────────────────────────────────────────────────
 // Lemon Clips — editable site content and integration settings.
 // Components read from this file. Nothing here is invented: empty values hide the related UI.
@@ -40,9 +42,9 @@ export const hero = {
 
 // Real campaign clips shown in the hero (from the cases). Add videoUrl for a moving preview.
 export const heroMedia = [
-  { src: 'media/cases/music-1.jpg', views: '1.2M', caption: 'Music' },
-  { src: 'media/cases/music-3.jpg', views: '3.6M', caption: 'Music' },
-  { src: 'media/cases/podcast-2.jpg', views: '1.8M', caption: 'Podcast' },
+  { src: media['music-1'], views: '1.2M', caption: 'Music' },
+  { src: media['music-3'], views: '3.6M', caption: 'Music' },
+  { src: media['podcast-2'], views: '1.8M', caption: 'Podcast' },
 ]
 
 export const services = [
@@ -59,32 +61,46 @@ export const services = [
     name: 'Managed Promotion',
     formValue: 'Managed Promotion',
     tagline: 'Your campaign, handled by a dedicated manager.',
+    guarantee: true,
     points: ['Personal campaign manager', 'Clipper selection & coordination', 'Publishing control', 'Results reporting'],
     cta: 'Get Started',
   },
   {
     id: 'smm',
-    name: 'Full-Service SMM',
+    name: 'Full-Service SMM & Music Promotion',
     formValue: 'Full-Service SMM',
     tagline: 'We manage your content, social media presence and growth strategy.',
+    guarantee: true,
     points: ['Content strategy & content plan', 'Short-form video production & editing', 'Posting and social media management', 'Personal manager', 'Extra reach through clipping'],
     cta: 'Get Started',
     featured: true,
   },
 ]
 
-export const steps = [
-  { title: 'Tell Us About Your Project', text: 'Share your music, goals and where you are today.' },
-  { title: 'We Build Your Growth Plan', text: 'You get a personal proposal: the right service, channels and timeline.' },
-  { title: 'Launch, Track & Scale', text: 'We go live, report results and scale what works.' },
-]
+export const howItWorks = {
+  title: ['ONE VIDEO. HUNDREDS OF CLIPS.', 'MILLIONS OF VIEWS.'],
+  subtitle: 'We turn your existing content into short-form videos and distribute them through a network of creators.',
+  steps: [
+    { tag: 'Original video', title: 'We Take Your Content', text: 'Music videos, interviews, performances, podcasts, behind-the-scenes footage or other existing content.' },
+    { tag: 'Short clips', title: 'We Cut It Into Short Clips', text: 'Our team and creators find the strongest moments, edit them into engaging short-form videos and adapt them for each platform.' },
+    { tag: 'Creator network', title: 'Creators Distribute at Scale', text: 'Multiple creators publish across TikTok, Instagram Reels and YouTube Shorts, putting your music in front of new audiences.' },
+    { tag: 'Views & results', title: 'We Track & Scale', text: 'We monitor views and performance, find the formats that work and scale distribution.' },
+  ],
+  fromScratch: 'No footage yet? With Full-Service SMM we create content from scratch.',
+}
 
-export const advantages = [
-  { title: 'Creator Network', icon: 'users' },
-  { title: 'Dedicated Management', icon: 'manager' },
-  { title: 'Real Performance Tracking', icon: 'chart' },
-  { title: 'Scalable Campaigns', icon: 'scale' },
-]
+export const why = {
+  title: ['GREAT MUSIC DESERVES', 'TO BE DISCOVERED.'],
+  subtitle: 'Your next fans may never find your profile. But they can discover your music through the content they already watch.',
+  benefits: [
+    { title: 'More Exposure', text: 'Get your music in front of new audiences across short-form platforms.', icon: 'eye' },
+    { title: 'More Discovery', text: 'Give people more chances to find your songs and your artist identity.', icon: 'music' },
+    { title: 'More Content', text: 'Turn existing footage into many engaging videos without filming something new every day.', icon: 'layers' },
+    { title: 'More Opportunities to Grow', text: 'Test formats, see what resonates and build momentum around each release.', icon: 'chart' },
+  ],
+  line: ['One artist account has one audience.', 'A network of creators opens the door to many.'],
+  note: 'Views don’t guarantee fans. They create more moments where someone hears your song, saves the sound or taps through to your profile.',
+}
 
 export const faq = [
   {
@@ -93,7 +109,7 @@ export const faq = [
   },
   {
     q: 'What services do you offer?',
-    a: 'Three options: Clipping Campaigns, Managed Promotion with a dedicated manager, and Full-Service SMM that covers strategy, content, posting and growth.',
+    a: 'Clipping Campaigns for mass short-form distribution, Managed Promotion with a dedicated manager, and Full-Service SMM & Music Promotion: strategy, content plan, video production, social media management and extra reach through clipping.',
   },
   {
     q: 'Can I start with a test campaign?',
@@ -108,11 +124,6 @@ export const faq = [
     a: 'Fill in the short form, contact a manager, or book a strategy session. We reply with next steps and a proposal.',
   },
 ]
-
-export const finalCta = {
-  title: ['READY TO GROW', 'YOUR MUSIC?'],
-  subtitle: 'Let’s build the right promotion strategy for your next release.',
-}
 
 export const formOptions = {
   roles: ['Artist', 'Label', 'Agency', 'Other'],

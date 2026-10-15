@@ -1,6 +1,8 @@
 import { hero, heroMedia } from '../content/site.js'
 import Actions from '../components/Actions.jsx'
 import Clip from '../components/Clip.jsx'
+import { GuaranteeBadge } from '../components/Guarantee.jsx'
+import { Lemon, LemonSlice } from '../components/Lemon.jsx'
 
 const ORBIT = ['TikTok', 'Instagram Reels', 'YouTube Shorts', 'Creator network', 'SMM', 'Dedicated manager']
 
@@ -57,6 +59,9 @@ function MediaFan() {
           </div>
         </div>
       ))}
+      <Lemon className="absolute -left-1 top-[2%] z-10 size-12 sm:size-16" anim="bob" />
+      <LemonSlice className="absolute -right-1 top-[44%] z-10 size-9 sm:size-12" />
+      <Lemon className="absolute right-[10%] -top-1 z-0 hidden size-8 opacity-70 sm:block" anim="sway" style={{ animationDelay: '-2s' }} />
       <div className="absolute bottom-[4%] left-1/2 z-10 w-max -translate-x-1/2 rounded-full border border-line bg-ink/90 px-3.5 py-1.5 text-[12px] font-semibold backdrop-blur">
         <span className="text-lemon">Real campaign clips</span> · Traffic Wolves team
       </div>
@@ -77,6 +82,7 @@ export default function Hero() {
               ))}
             </h1>
             <p className="max-w-[36rem] text-[clamp(18px,2vw,22px)] leading-[1.45] text-cream/85">{hero.subtitle}</p>
+            <GuaranteeBadge />
           </div>
           <div className="mx-auto w-full max-w-[300px] sm:max-w-[400px] lg:max-w-none">
             {heroMedia.length ? <MediaFan /> : <Orbit />}

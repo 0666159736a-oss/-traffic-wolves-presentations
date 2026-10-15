@@ -1,3 +1,5 @@
+import { media } from './media.js'
+
 // ─────────────────────────────────────────────────────────────
 // Case studies — transferred from the Traffic Wolves site (traffic-wolves-design-preview).
 // All of them are Traffic Wolves team results (attribution: 'team'); the UI labels them so.
@@ -20,7 +22,7 @@ export const cases = [
       { label: 'In music charts', value: 'Top 3' },
       { label: 'New followers', value: '250K+' },
     ],
-    clips: [{ src: 'media/cases/music-1.jpg', views: '1.2M' }, { src: 'media/cases/music-2.jpg', views: '2.7M' }, { src: 'media/cases/music-3.jpg', views: '3.6M' }],
+    clips: [{ src: media['music-1'], views: '1.2M' }, { src: media['music-2'], views: '2.7M' }, { src: media['music-3'], views: '3.6M' }],
   },
   {
     id: 'podcast',
@@ -34,7 +36,7 @@ export const cases = [
       { label: 'Podcast charts by streams', value: 'Top 1' },
       { label: 'Stream growth', value: 'Massive' },
     ],
-    clips: [{ src: 'media/cases/podcast-1.jpg', views: '732K' }, { src: 'media/cases/podcast-2.jpg', views: '1.8M' }, { src: 'media/cases/podcast-3.jpg', views: '2.4M' }],
+    clips: [{ src: media['podcast-1'], views: '732K' }, { src: media['podcast-2'], views: '1.8M' }, { src: media['podcast-3'], views: '2.4M' }],
   },
   {
     id: 'sports',
@@ -48,7 +50,7 @@ export const cases = [
       { label: 'Chart position', value: '–' },
       { label: 'Traffic', value: 'Moderate' },
     ],
-    clips: [{ src: 'media/cases/sports-1.jpg', views: '718.8K' }, { src: 'media/cases/sports-2.jpg', views: '3.8M' }, { src: 'media/cases/sports-3.jpg', views: '9.5M' }],
+    clips: [{ src: media['sports-1'], views: '718.8K' }, { src: media['sports-2'], views: '3.8M' }, { src: media['sports-3'], views: '9.5M' }],
   },
   {
     id: 'doctor',
@@ -62,7 +64,7 @@ export const cases = [
       { label: 'Medical category on TikTok', value: 'Top 1' },
       { label: 'New followers', value: '320K+' },
     ],
-    clips: [{ src: 'media/cases/doctor-1.jpg', views: '1.3M' }, { src: 'media/cases/doctor-2.jpg', views: '2.6M' }, { src: 'media/cases/doctor-3.jpg', views: '3.8M' }],
+    clips: [{ src: media['doctor-1'], views: '1.3M' }, { src: media['doctor-2'], views: '2.6M' }, { src: media['doctor-3'], views: '3.8M' }],
   },
   {
     id: 'education',
@@ -76,7 +78,7 @@ export const cases = [
       { label: 'Chart position', value: 'Top 1' },
       { label: 'Stream growth', value: '15.8K+' },
     ],
-    clips: [{ src: 'media/cases/edu-1.jpg', views: '1.2M' }, { src: 'media/cases/edu-2.jpg', views: '3.6M' }, { src: 'media/cases/edu-3.jpg', views: '2.8M' }],
+    clips: [{ src: media['edu-1'], views: '1.2M' }, { src: media['edu-2'], views: '3.6M' }, { src: media['edu-3'], views: '2.8M' }],
   },
 ]
 

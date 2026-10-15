@@ -29,7 +29,7 @@ export const Copy = I(<><rect x="8" y="8" width="12" height="12" rx="2" /><path 
 export function Logo({ className = '' }) {
   return (
     <span className={`inline-flex items-center gap-2.5 ${className}`}>
-      <svg viewBox="0 0 40 40" className="size-9 shrink-0" aria-hidden="true">
+      <svg viewBox="0 0 40 40" className="size-9 shrink-0 animate-sway [animation-duration:7s]" aria-hidden="true">
         <ellipse cx="20" cy="20" rx="17" ry="13" transform="rotate(-35 20 20)" fill="#f6d23c" />
         <ellipse cx="20" cy="20" rx="11" ry="7.5" transform="rotate(-35 20 20)" fill="none" stroke="#14120a" strokeWidth="2.2" />
         <path d="M17 15.5v9l7.5-4.5z" fill="#14120a" />

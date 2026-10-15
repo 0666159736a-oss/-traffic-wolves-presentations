@@ -6,7 +6,7 @@ const nav = allNav.filter((n) => n.needs !== 'cases' || cases.length)
 import { useNav } from '../lib/nav.jsx'
 import { Logo, Menu, X, ArrowRight } from './Icons.jsx'
 
-const SPY = ['get-started', 'results', 'services', 'how', 'feedback', 'faq', 'apply']
+const SPY = ['get-started', 'results', 'how', 'why', 'services', 'feedback', 'faq', 'apply']
 
 export default function Nav() {
   const { page, go } = useNav()
@@ -34,7 +34,7 @@ export default function Nav() {
 
   useEffect(() => { document.body.style.overflow = open ? 'hidden' : '' }, [open])
 
-  const current = page === 'clippers' ? 'clippers' : active
+  const current = page === 'clippers' ? 'clippers' : active === 'why' ? 'how' : active
   const click = (to) => { setOpen(false); go(to) }
 
   return (
