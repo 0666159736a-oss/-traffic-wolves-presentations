@@ -9,7 +9,7 @@ export default function Hero() {
       <div className="absolute inset-0 -z-10">
         {heroPhoto
           ? <img src={heroPhoto} alt="" fetchpriority="high" className="size-full object-cover animate-[kenburns_14s_ease-out_both]" />
-          : <div className="size-full" style={{ background: 'radial-gradient(60% 70% at 78% 30%, rgb(255 214 10 / .55), transparent 60%), radial-gradient(40% 50% at 95% 90%, rgb(242 183 5 / .4), transparent 70%), radial-gradient(50% 60% at 10% 100%, rgb(255 214 10 / .18), transparent 70%), #0a0a0a' }} />}
+          : <div className="size-full" style={{ background: 'radial-gradient(60% 70% at 78% 30%, rgb(246 210 60 / .55), transparent 60%), radial-gradient(40% 50% at 95% 90%, rgb(217 168 0 / .4), transparent 70%), radial-gradient(50% 60% at 10% 100%, rgb(246 210 60 / .18), transparent 70%), #0a0a0a' }} />}
         <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/55 to-black/20" />
         <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-ink to-transparent" />
       </div>
@@ -27,7 +27,7 @@ export default function Hero() {
           </h1>
           <p className="max-w-xl text-[clamp(17px,1.8vw,21px)] font-medium leading-relaxed text-white/85">{hero.subtitle}</p>
 
-          <div className="flex w-fit max-w-full flex-col gap-1 rounded-[28px] bg-lemon px-6 py-5 text-ink shadow-[0_30px_80px_-30px_rgb(255_214_10/.7)] sm:px-8">
+          <div className="flex w-fit max-w-full flex-col gap-1 rounded-[28px] bg-lemon px-6 py-5 text-ink shadow-[0_30px_80px_-30px_rgb(246_210_60/.7)] sm:px-8">
             <div className="flex flex-wrap items-baseline gap-x-3">
               <span className="h-display tnum text-[clamp(52px,8vw,96px)] !leading-none">${price.perThousand.toFixed(2)}</span>
               <span className="text-[clamp(16px,1.8vw,22px)] font-extrabold">за 1 000 переглядів</span>

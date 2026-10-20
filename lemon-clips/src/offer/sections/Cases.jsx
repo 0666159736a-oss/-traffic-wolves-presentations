@@ -1,83 +1,52 @@
 import { cases } from '../content.js'
-import { ArrowUpRight, LogoMark, Photo, Reveal, SectionTitle } from '../ui.jsx'
+import { ArrowRight, Reveal, SectionTitle } from '../ui.jsx'
 
-const Pending = ({ children = 'буде додано' }) => <span className="font-semibold text-white/35">{children}</span>
-
-function CaseCard({ c, i }) {
-  const facts = [
-    { label: 'Тип просування', value: c.type },
-    { label: 'Перегляди', value: c.views },
-  ]
+/** «value → label» line, value highlighted in brand yellow (LetsCorn pattern, yellow instead of purple). */
+function Metric({ value, label, pending }) {
   return (
-    <Reveal as="article" className="group grid overflow-hidden rounded-[36px] border border-hair bg-panel lg:grid-cols-[1.05fr_1fr]">
-      {/* Large photo */}
-      <div className="relative min-h-[380px] overflow-hidden sm:min-h-[460px] lg:min-h-[620px]">
-        {c.photo
-          ? <img src={c.photo} alt={c.name} loading="lazy" className="absolute inset-0 size-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" />
-          : (
-            <div className="absolute inset-0 grid place-items-center" style={{ background: 'radial-gradient(70% 60% at 70% 20%, rgb(255 214 10 / .35), transparent 70%), #1a1a1a' }}>
-              <div data-pdf-hide className="flex flex-col items-center gap-2 rounded-2xl border border-dashed border-white/30 px-5 py-4 text-center text-[13px] text-white/70">
-                <Photo className="size-6" /> Фото артиста буде додано
-              </div>
-            </div>
-          )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent" />
-        <div className="absolute left-5 top-5 flex items-center gap-2 rounded-full bg-white px-3 py-1.5 text-[12px] font-extrabold text-ink">
-          <LogoMark className="size-5" /> Кейс 0{i + 1}
-        </div>
-        <div className="absolute inset-x-5 bottom-5 sm:inset-x-8 sm:bottom-8">
-          <h3 className="h-display text-[clamp(44px,7vw,96px)] text-white">{c.name}</h3>
-        </div>
+    <p className="font-[family-name:var(--font-mono)] text-[15px] leading-[1.5] sm:text-[16px]">
+      {pending
+        ? <><span className="text-ink-dim">{label}</span> <span className="text-black/30">→ буде додано</span></>
+        : <><span className="mark font-bold">{value}</span> <span className="text-ink-dim">→</span> {label}</>}
+    </p>
+  )
+}
+
+function CaseCard({ c }) {
+  const lines = [
+    ...c.metrics,
+    c.views ? { value: c.views, label: 'переглядів' } : { label: 'Перегляди', pending: true },
+    ...c.extra,
+  ]
+  const Media = c.details?.url ? 'a' : 'div'
+  return (
+    <Reveal as="article" className="grid gap-6 rounded-[36px] bg-white p-5 text-ink sm:p-8 lg:grid-cols-[minmax(0,560px)_1fr] lg:gap-x-12">
+      <div className="flex flex-wrap gap-x-3 gap-y-1 font-[family-name:var(--font-mono)] text-[14px] text-ink-dim sm:text-[15px] lg:col-span-2">
+        {c.tags.map((t) => <span key={t}>{'{'} {t} {'}'}</span>)}
       </div>
 
-      {/* Content */}
-      <div className="flex flex-col gap-7 p-6 sm:p-10">
-        <div className="flex flex-col gap-2">
-          <span className="label text-dim">Головний результат</span>
-          <div className="h-display text-[clamp(38px,5vw,68px)] text-lemon">{c.headline || <Pending />}</div>
-        </div>
-
-        <dl className="grid gap-3 sm:grid-cols-2">
-          {facts.map((f) => (
-            <div key={f.label} className="rounded-[20px] bg-white/[.04] p-4">
-              <dt className="label !text-[11px] text-dim">{f.label}</dt>
-              <dd className="mt-1 text-[18px] font-extrabold">{f.value || <Pending />}</dd>
-            </div>
-          ))}
-        </dl>
-
-        <div className="flex flex-col gap-2">
-          <span className="label text-dim">Про кампанію</span>
-          {c.description ? <p className="text-[16px] leading-relaxed text-white/85">{c.description}</p> : <p className="text-[15px]"><Pending>Опис кампанії буде додано</Pending></p>}
-        </div>
-
-        {c.results.length > 0 && (
-          <ul className="flex flex-col gap-2">
-            {c.results.map((r) => <li key={r} className="flex gap-3 text-[16px] font-semibold"><span className="mt-2 size-2 shrink-0 rounded-full bg-lemon" />{r}</li>)}
-          </ul>
-        )}
-
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-          {c.metrics.length > 0
-            ? c.metrics.map((m) => (
-              <div key={m.label} className="rounded-[20px] border border-lemon/30 p-4">
-                <div className="h-display tnum text-[clamp(24px,2.6vw,34px)] text-lemon">{m.value}</div>
-                <div className="mt-1 text-[13px] font-semibold text-dim">{m.label}</div>
-              </div>
-            ))
-            : ['Перегляди', 'Охоплення', 'Інше'].map((l) => (
-              <div key={l} className="rounded-[20px] border border-dashed border-white/15 p-4">
-                <div className="h-display text-[24px] text-white/25">—</div>
-                <div className="mt-1 text-[13px] font-semibold text-white/35">{l}</div>
-              </div>
-            ))}
-        </div>
-
+      <Media {...(c.details?.url ? { href: c.details.url, target: '_blank', rel: 'noopener noreferrer' } : {})}
+        className="group relative block overflow-hidden rounded-[6px] bg-ink lg:row-span-2">
+        {c.photo
+          ? <img src={c.photo} alt={c.name} loading="lazy" className="aspect-[4/3] w-full object-cover object-[50%_30%] transition-transform duration-700 group-hover:scale-[1.03] lg:aspect-square" />
+          : <div className="grid aspect-[4/3] place-items-center text-[14px] text-white/60 lg:aspect-square">Фото буде додано</div>}
         {c.details?.url && (
-          <a data-pdf-hide href={c.details.url} target="_blank" rel="noopener noreferrer" className="btn btn-lemon mt-auto w-fit">
-            {c.details.label || 'Детальніше'} <span className="arrow"><ArrowUpRight className="size-4" /></span>
-          </a>
+          <span data-pdf-hide className="absolute bottom-4 left-4 inline-flex items-center gap-6 rounded-full bg-ink py-2 pl-6 pr-2 font-[family-name:var(--font-mono)] text-[15px] text-white sm:bottom-6 sm:left-6">
+            {c.details.label || 'Детальніше'}
+            <span className="grid size-11 place-items-center rounded-full bg-white text-ink transition-transform group-hover:translate-x-1"><ArrowRight className="size-5" /></span>
+          </span>
         )}
+      </Media>
+
+      <div className="flex flex-col gap-2 lg:self-end">
+        <h3 className="h-display text-[clamp(34px,5vw,64px)]">{c.name}</h3>
+        {c.subtitle
+          ? <p className="text-[clamp(17px,1.8vw,21px)] font-medium">{c.subtitle}</p>
+          : <p className="text-[16px] text-black/35">Опис кампанії буде додано</p>}
+      </div>
+
+      <div className="grid content-start gap-x-10 gap-y-4 border-t border-black/10 pt-6 sm:grid-cols-2">
+        {lines.map((m, i) => <Metric key={i} {...m} />)}
       </div>
     </Reveal>
   )
@@ -88,8 +57,8 @@ export default function Cases() {
     <section id="cases" data-pdf className="gutter py-[clamp(40px,6vw,80px)]">
       <div className="wrap flex flex-col gap-8">
         <Reveal><SectionTitle kicker="Результати">НАШІ <span className="text-lemon">КЕЙСИ</span></SectionTitle></Reveal>
-        <div className="flex flex-col gap-6">
-          {cases.map((c, i) => <CaseCard key={c.id} c={c} i={i} />)}
+        <div className="grid gap-5">
+          {cases.map((c) => <CaseCard key={c.id} c={c} />)}
         </div>
       </div>
     </section>

@@ -22,22 +22,25 @@ export const Plus = I(<><path d="M12 5v14" /><path d="M5 12h14" /></>)
 export const Photo = I(<><rect x="3" y="5" width="18" height="14" rx="2" /><circle cx="9" cy="10" r="2" /><path d="m21 16-5-5-8 8" /></>)
 
 /** Lemon Clips mark: lemon body with a play triangle, as on the platform. */
-export function LogoMark({ className = 'size-9' }) {
+export function LogoMark({ className = 'size-8 sm:size-9' }) {
   return (
     <svg viewBox="0 0 40 40" className={className} aria-hidden="true">
-      <ellipse cx="20" cy="20" rx="17" ry="13" transform="rotate(-35 20 20)" fill="#ffd60a" />
+      <ellipse cx="20" cy="20" rx="17" ry="13" transform="rotate(-35 20 20)" fill="#f6d23c" />
       <ellipse cx="20" cy="20" rx="11" ry="7.5" transform="rotate(-35 20 20)" fill="none" stroke="#0a0a0a" strokeWidth="2.2" />
       <path d="M17 15.5v9l7.5-4.5z" fill="#0a0a0a" />
-      <circle cx="34" cy="6.5" r="3" fill="#ffd60a" />
+      <circle cx="34" cy="6.5" r="3" fill="#f6d23c" />
     </svg>
   )
 }
 
+/** Wordmark as on lemonclips.com: LEMON + CLIPS in yellow. On white surfaces CLIPS uses the deeper yellow for contrast. */
 export function Logo({ dark = true }) {
   return (
     <span className="inline-flex items-center gap-2.5">
       <LogoMark />
-      <span className={`font-[family-name:var(--font-display)] text-[17px] font-extrabold tracking-tight ${dark ? 'text-ink' : 'text-white'}`}>LEMON CLIPS</span>
+      <span className="text-[17px] font-black leading-none tracking-[-.02em] sm:text-[19px]" style={{ fontFamily: 'var(--font-wordmark)', fontStretch: '112%' }}>
+        <span className={dark ? 'text-ink' : 'text-white'}>LEMON</span><span className={dark ? 'text-lemon-deep' : 'text-lemon'}>CLIPS</span>
+      </span>
     </span>
   )
 }
@@ -72,7 +75,7 @@ export function useInView(threshold = 0.3) {
 export function SectionTitle({ kicker, children, light = false }) {
   return (
     <div className="flex flex-col gap-3">
-      {kicker && <span className={`label ${light ? 'text-ink-dim' : 'text-lemon'}`}>{kicker}</span>}
+      {kicker && <span className={`eyebrow ${light ? '!text-ink-dim' : ''}`}>{kicker}</span>}
       <h2 className={`h-display text-[clamp(34px,6vw,76px)] ${light ? 'text-ink' : ''}`}>{children}</h2>
     </div>
   )

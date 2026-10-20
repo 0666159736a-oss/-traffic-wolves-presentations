@@ -61,28 +61,28 @@ export const process = {
 
 // ── Кейси ──────────────────────────────────────────────────────
 // Лише реальні дані. Порожнє поле = «буде додано» (нічого не вигадуємо).
+// Оформлення — за принципом LetsCorn «Our Cases»: теги, велике фото, назва, підзаголовок, показники у 2 колонки.
 // {
-//   id, name: 'Назва артиста / проєкту',
-//   photo: 'offer/cases/harfang.jpg',             // реальне фото артиста / проєкту
-//   type: 'Тип просування',
-//   headline: 'Головний результат крупно',
-//   views: '12 400 000',                           // кількість переглядів
-//   description: 'Короткий опис просування',
-//   results: ['Ключовий результат', …],
-//   metrics: [{ value: '1,2M', label: 'Охоплення' }, …], // додаткові показники
-//   details: { url: 'https://…', label: 'Переглянути матеріали' } // якщо є додаткові матеріали
+//   id: 'slug',
+//   name: 'Назва артиста / проєкту',
+//   photo: 'offer/cases/slug.jpg',              // реальне фото (public/offer/cases)
+//   tags: ['Music Promotion', 'Artist Growth'],   // тип просування
+//   subtitle: 'Короткий опис просування',
+//   views: '12 400 000',                          // кількість переглядів
+//   metrics: [{ value: 'ТОП-3', label: 'у чартах' }, { value: '7M', label: 'охоплення' }],  // ключові результати
+//   extra: [{ value: '+20K', label: 'підписників з одного відео' }],                         // додаткові показники
+//   details: { url: 'https://…', label: 'Детальніше' }  // якщо є додаткові матеріали
 // }
 export const cases = [
   {
     id: 'harfang',
     name: 'HARFANG',
-    photo: '',
-    type: 'Music Promotion / Artist Growth',
-    headline: 'ТОП-3 У ЧАРТАХ',
+    photo: 'offer/cases/harfang.jpg',
+    tags: ['Music Promotion', 'Artist Growth'],
+    subtitle: '',
     views: '',
-    description: '',
-    results: [],
-    metrics: [],
+    metrics: [{ value: 'ТОП-3', label: 'у чартах' }],
+    extra: [],
     details: null,
   },
 ]

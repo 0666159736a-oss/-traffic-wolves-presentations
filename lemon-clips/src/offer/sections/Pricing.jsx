@@ -27,8 +27,8 @@ function Calculator() {
         </div>
         <input id="calc-views" type="range" min={min} max={max} step={step} value={m} onChange={(e) => setM(clamp(+e.target.value))}
           aria-valuetext={`${fmtNum(views)} переглядів`}
-          className="h-2 w-full cursor-pointer appearance-none rounded-full accent-[#ffd60a]"
-          style={{ background: `linear-gradient(90deg, #ffd60a ${pct}%, rgb(255 255 255 / .12) ${pct}%)` }} />
+          className="h-2 w-full cursor-pointer appearance-none rounded-full accent-[#f6d23c]"
+          style={{ background: `linear-gradient(90deg, #f6d23c ${pct}%, rgb(255 255 255 / .12) ${pct}%)` }} />
         <div className="flex justify-between text-[12px] font-semibold text-dim"><span>{fmtNum(price.minViews)}</span><span>{fmtNum(price.maxViews)}</span></div>
         <div className="flex flex-wrap gap-2">
           {QUICK.map((q) => (

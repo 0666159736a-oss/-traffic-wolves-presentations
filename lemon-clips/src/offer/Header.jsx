@@ -16,7 +16,7 @@ export default function Header({ onCopy, onPdf, pdfBusy }) {
   return (
     <header data-pdf-hide className="gutter fixed inset-x-0 z-50" style={{ top: 'calc(env(safe-area-inset-top, 0px) + 12px)' }}>
       <div className="wrap">
-        <div className="flex h-16 items-center justify-between gap-3 rounded-full bg-white pl-4 pr-2 shadow-[0_10px_40px_-12px_rgb(0_0_0/.6)] sm:pl-5">
+        <div className="flex h-16 items-center justify-between gap-2 rounded-full bg-white pl-3.5 pr-2 shadow-[0_10px_40px_-12px_rgb(0_0_0/.6)] sm:pl-5">
           <a href="#top" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }) }} aria-label="Lemon Clips — на початок" className="shrink-0"><Logo /></a>
           <nav aria-label="Розділи" className="hidden items-center gap-1 lg:flex">
             {nav.map((n) => (
@@ -25,7 +25,7 @@ export default function Header({ onCopy, onPdf, pdfBusy }) {
             ))}
           </nav>
           <div className="flex items-center gap-1.5">
-            <button type="button" onClick={onCopy} className="grid size-11 place-items-center rounded-full border border-black/10 text-ink hover:bg-black/5" aria-label="Копіювати посилання" title="Копіювати посилання"><LinkIcon /></button>
+            <button type="button" onClick={onCopy} className="hidden size-11 place-items-center rounded-full border border-black/10 text-ink hover:bg-black/5 sm:grid" aria-label="Копіювати посилання" title="Копіювати посилання"><LinkIcon /></button>
             <button type="button" onClick={onPdf} disabled={pdfBusy} className="btn btn-lemon !min-h-[48px] !px-4 sm:!px-5" aria-label="Завантажити PDF">
               <Download className="size-[18px]" /><span className="hidden sm:inline">{pdfBusy ? 'Готуємо…' : 'PDF'}</span>
             </button>
@@ -39,6 +39,9 @@ export default function Header({ onCopy, onPdf, pdfBusy }) {
                 {n.label}<span className="size-2 rounded-full bg-lemon" />
               </button>
             ))}
+            <button type="button" onClick={() => { setOpen(false); onCopy() }} className="mt-1 flex items-center gap-3 rounded-2xl bg-black/[.04] px-4 py-3.5 text-left text-[16px] font-bold text-ink">
+              <LinkIcon /> Копіювати посилання
+            </button>
           </nav>
         )}
       </div>

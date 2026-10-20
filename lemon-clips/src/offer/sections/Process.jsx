@@ -37,7 +37,7 @@ export default function Process() {
                 <li key={s.title}>
                   <button type="button" role="tab" aria-selected={on} onClick={() => pick(i)}
                     className={`flex w-full items-center gap-3 rounded-[22px] p-2 text-left transition-colors md:flex-col md:items-start md:bg-transparent md:p-0 ${on ? 'bg-white/[.06]' : ''}`}>
-                    <span className={`grid size-14 shrink-0 place-items-center rounded-full font-[family-name:var(--font-display)] text-[17px] font-extrabold transition-all duration-500 ${on ? 'scale-110 bg-lemon text-ink shadow-[0_0_0_8px_rgb(255_214_10/.18)]' : done ? 'bg-lemon/80 text-ink' : 'border-2 border-white/20 bg-ink text-white'}`}>
+                    <span className={`grid size-14 shrink-0 place-items-center rounded-full font-[family-name:var(--font-display)] text-[17px] font-extrabold transition-all duration-500 ${on ? 'scale-110 bg-lemon text-ink shadow-[0_0_0_8px_rgb(246_210_60/.18)]' : done ? 'bg-lemon/80 text-ink' : 'border-2 border-white/20 bg-ink text-white'}`}>
                       0{i + 1}
                     </span>
                     <span className={`text-[17px] font-extrabold uppercase tracking-wide transition-colors md:mt-2 ${on ? 'text-lemon' : 'text-white/80'}`}>{s.title}</span>
