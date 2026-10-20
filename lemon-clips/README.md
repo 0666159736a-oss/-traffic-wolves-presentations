@@ -92,3 +92,23 @@ social are never lost), then opens the calendar prefilled:
   Q2 *Instagram / TikTok Profile* (required), Q3 *I Am* (required). They are prefilled via `a1`, `a2`, `a3`.
 * **Cal.com**: Event type → Advanced → Booking questions. Add questions with identifiers `phone`
   (Phone, required), `social` (Short text, required) and `role` (Select: Artist, Record Label, Agency, Other).
+
+## Комерційна пропозиція (UA) — `offer.html`
+
+Окрема сторінка в тому ж проєкті: `npm run dev` → http://localhost:5173/offer.html
+
+| Що редагувати | Де |
+| --- | --- |
+| Тексти, ціна за 1 000, таблиця, мін. замовлення | `src/offer/content.js` |
+| Фото лимонів для першого екрана | `public/offer/hero-lemons.jpg` + `heroPhoto` у `content.js` |
+| Кейси (HARFANG та нові) | масив `cases` у `content.js`, фото в `public/offer/cases/` |
+| Посилання для кнопки «Копіювати» | `SHARE_URL` у `src/offer/share.js` |
+
+* **Новий кейс**: додайте об’єкт у `cases` (назва, фото, тип просування, перегляди, опис, результати, показники, посилання на матеріали). Порожні поля показуються як «буде додано».
+* **PDF**: кнопка збирає PDF у браузері (html2canvas-pro + jsPDF) з кожного розділу `[data-pdf]` у ширині 1280 px — українські літери, фото та ціни виглядають як на сайті.
+* **Зображення**: JPEG/WebP до ~300 КБ, ширина 2400 px для фону, 1600 px для фото кейсів.
+
+### Публікація (лише після підтвердження)
+* **Vercel**: Import → Root Directory `lemon-clips` → налаштування підхопляться з `vercel.json`. Сторінка: `/offer`.
+* **Netlify**: Base directory `lemon-clips` → `netlify.toml`. Сторінка: `/offer`.
+* `npm run build:offer` — один самодостатній HTML-файл `../lemon-clips-offer.html`.

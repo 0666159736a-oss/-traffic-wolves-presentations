@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+/* Lemon Clips offer — continuation of the lemonclips.com look:
+   black stage, saturated lemon yellow, white rounded blocks, heavy display type, real lemon photography. */
+@theme {
+  --color-ink: #0a0a0a;
+  --color-panel: #141414;
+  --color-panel-2: #1d1d1d;
+  --color-lemon: #ffd60a;
+  --color-lemon-deep: #f2b705;
+  --color-snow: #ffffff;
+  --color-fg: #fafafa;
+  --color-dim: #a1a1a1;
+  --color-ink-dim: #5b5b5b;
+  --color-hair: rgb(255 255 255 / 0.1);
+
+  --font-display: "Unbounded", "Arial Black", system-ui, sans-serif;
+  --font-sans: "Manrope", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --animate-sway: sway 5s ease-in-out infinite;
+}
+
+@keyframes sway { 0%,100% { rotate: -6deg } 50% { rotate: 6deg } }
+@keyframes reveal { from { transform: translateY(28px) } to { transform: none } }
+@keyframes kenburns { from { transform: scale(1.08) } to { transform: scale(1) } }
+@keyframes shimmer { to { background-position: 200% 0 } }
+
+:root { color-scheme: dark; }
+html { scroll-behavior: smooth; scroll-padding-top: calc(96px + env(safe-area-inset-top, 0px)); -webkit-text-size-adjust: 100%; }
+body { background: var(--color-ink); color: var(--color-fg); font-family: var(--font-sans); font-size: 16px; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+
+@layer components {
+  .gutter { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .wrap { width: 100%; max-width: 1240px; margin-inline: auto; }
+  .h-display { font-family: var(--font-display); font-weight: 800; letter-spacing: -0.02em; line-height: 1.02; text-wrap: balance; }
+  .label { font-family: var(--font-sans); font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+  .tnum { font-variant-numeric: tabular-nums; }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: .6rem; min-height: 52px; padding: 0 1.5rem; border-radius: 999px;
+    font-weight: 800; font-size: 15px; transition: transform .2s ease, background-color .2s, color .2s, border-color .2s, box-shadow .2s; cursor: pointer; white-space: nowrap; }
+  .btn:active { transform: scale(.97); }
+  .btn-lemon { background: var(--color-lemon); color: #0a0a0a; }
+  .btn-lemon:hover { background: #ffe14d; box-shadow: 0 12px 40px -12px rgb(255 214 10 / .7); transform: translateY(-1px); }
+  .btn-white { background: #fff; color: #0a0a0a; }
+  .btn-white:hover { background: #f1f1f1; transform: translateY(-1px); }
+  .btn-line { border: 1.5px solid rgb(255 255 255 / .35); color: #fff; }
+  .btn-line:hover { border-color: var(--color-lemon); color: var(--color-lemon); }
+  .btn .arrow { display: grid; place-items: center; width: 30px; height: 30px; margin-right: -.8rem; border-radius: 999px; background: #0a0a0a; color: var(--color-lemon); transition: transform .2s; }
+  .btn:hover .arrow { transform: translateX(3px) rotate(-45deg); }
+
+  .reveal.in { animation: reveal .9s cubic-bezier(.2,.7,.2,1) both; }
+}
+
+:focus-visible { outline: 2px solid var(--color-lemon); outline-offset: 3px; border-radius: 10px; }
+
+/* PDF capture: freeze motion so every element sits at its final state. */
+.pdf-mode *, .pdf-mode *::before, .pdf-mode *::after { animation: none !important; transition: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+}
