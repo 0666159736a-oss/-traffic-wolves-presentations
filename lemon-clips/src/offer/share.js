@@ -1,7 +1,7 @@
 // Copy-link and PDF export for the commercial offer.
 
 /** Public URL to share. Set it once the site is deployed (e.g. 'https://offer.lemonclips.com'); otherwise the current address is used. */
-export const SHARE_URL = 'https://claude.ai/artifact/B8QbbTLrFo7khic5VaLhbj'
+export const SHARE_URL = ''
 
 export async function copyLink() {
   const url = SHARE_URL || location.href.split('#')[0]
