@@ -66,6 +66,7 @@ export const process = {
 //   id: 'slug',
 //   name: 'Назва артиста / проєкту',
 //   photos: ['offer/cases/slug.jpg'],           // 1–2 реальні фото (public/offer/cases)
+//   clips: [{ src, views }],                     // або 3 кадри роликів з переглядами
 //   tags: ['Music Promotion', 'Artist Growth'],   // тип просування
 //   subtitle: 'Короткий опис просування',
 //   views: '12 400 000',                          // кількість переглядів
@@ -83,7 +84,51 @@ export const cases = [
     views: '3 000 000',
     metrics: [{ value: 'ТОП-3', label: 'у чартах' }],
     extra: [],
-    details: null,
+  },
+  {
+    id: 'music',
+    name: 'МУЗИКА',
+    clips: [{ src: 'offer/cases/music-1.jpg', views: '1,2M' }, { src: 'offer/cases/music-2.jpg', views: '2,7M' }, { src: 'offer/cases/music-3.jpg', views: '3,6M' }],
+    tags: ['Music Promotion'],
+    subtitle: 'Просування музичного артиста. Результати за 1 місяць.',
+    metrics: [{ value: '12,5M', label: 'загальне охоплення' }, { value: '1,8M+', label: 'залучень' }, { value: 'ТОП-3', label: 'у музичних чартах' }, { value: '250K+', label: 'нових підписників' }],
+    extra: [],
+  },
+  {
+    id: 'podcast',
+    name: 'ПОДКАСТ',
+    clips: [{ src: 'offer/cases/podcast-1.jpg', views: '732K' }, { src: 'offer/cases/podcast-2.jpg', views: '1,8M' }, { src: 'offer/cases/podcast-3.jpg', views: '2,4M' }],
+    tags: ['Podcast Promotion'],
+    subtitle: 'Короткі відео з випусків подкасту. Результати за 1 місяць.',
+    metrics: [{ value: '12,5M', label: 'загальне охоплення' }, { value: '1,2M+', label: 'залучень' }, { value: 'ТОП-1', label: 'у подкаст-чартах за стрімами' }, { value: 'Значне', label: 'зростання стрімів' }],
+    extra: [],
+  },
+  {
+    id: 'sports',
+    name: 'СПОРТ',
+    clips: [{ src: 'offer/cases/sports-1.jpg', views: '718,8K' }, { src: 'offer/cases/sports-2.jpg', views: '3,8M' }, { src: 'offer/cases/sports-3.jpg', views: '9,5M' }],
+    tags: ['Sports Content'],
+    subtitle: 'Хайлайти, виходи на ринг і моменти боїв.',
+    metrics: [{ value: '1B+', label: 'переглядів' }, { value: '~50M', label: 'переглядів за 1 місяць' }, { value: '~220K', label: 'підписників за 1 місяць' }],
+    extra: [],
+  },
+  {
+    id: 'doctor',
+    name: 'ЛІКАР',
+    clips: [{ src: 'offer/cases/doctor-1.jpg', views: '1,3M' }, { src: 'offer/cases/doctor-2.jpg', views: '2,6M' }, { src: 'offer/cases/doctor-3.jpg', views: '3,8M' }],
+    tags: ['Expert Content'],
+    subtitle: 'Експертний контент лікаря. Результати за 1 місяць.',
+    metrics: [{ value: '12,5M', label: 'загальне охоплення' }, { value: '1,9M+', label: 'залучень' }, { value: 'ТОП-1', label: 'у медичній категорії TikTok' }, { value: '320K+', label: 'нових підписників' }],
+    extra: [],
+  },
+  {
+    id: 'education',
+    name: 'ОСВІТА',
+    clips: [{ src: 'offer/cases/edu-1.jpg', views: '1,2M' }, { src: 'offer/cases/edu-2.jpg', views: '3,6M' }, { src: 'offer/cases/edu-3.jpg', views: '2,8M' }],
+    tags: ['Educational Content', 'TikTok'],
+    subtitle: 'Освітні та пізнавальні ролики. Ключові показники за 1 місяць.',
+    metrics: [{ value: '7,3M', label: 'переглядів одного відео' }, { value: '7M+', label: 'залучень' }, { value: 'ТОП-1', label: 'позиція в чартах' }, { value: '15,8K+', label: 'зростання стрімів' }],
+    extra: [],
   },
 ]
 
