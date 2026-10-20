@@ -2,18 +2,18 @@ import { cases } from '../content.js'
 import { ArrowRight, Reveal, SectionTitle } from '../ui.jsx'
 
 /** «value → label» line, value highlighted in brand yellow (LetsCorn pattern, yellow instead of purple). */
-function Metric({ value, label, pending }) {
+function Metric({ value, label }) {
   return (
     <p className="font-[family-name:var(--font-mono)] text-[15px] leading-[1.5] sm:text-[16px]">
-      {pending
-        ? <><span className="text-ink-dim">{label}</span> <span className="text-black/30">→ буде додано</span></>
-        : <><span className="mark font-bold">{value}</span> <span className="text-ink-dim">→</span> {label}</>}
+      {value
+        ? <><span className="mark font-bold">{value}</span> <span className="text-ink-dim">→</span> {label}</>
+        : <><span className="text-lemon-deep">✦</span> {label}</>}
     </p>
   )
 }
 
 function CaseCard({ c, wide }) {
-  const lines = [...c.metrics, ...(c.views ? [{ value: c.views, label: 'переглядів' }] : []), ...(c.extra || [])]
+  const lines = c.metrics || []
   const Media = c.details?.url ? 'a' : 'div'
   return (
     <Reveal as="article" className={`grid content-start gap-6 rounded-[36px] bg-white p-5 text-ink sm:p-8 ${wide ? 'lg:col-span-2 lg:grid-cols-[minmax(0,560px)_1fr] lg:gap-x-12' : ''}`}>
@@ -23,7 +23,9 @@ function CaseCard({ c, wide }) {
 
       <Media {...(c.details?.url ? { href: c.details.url, target: '_blank', rel: 'noopener noreferrer' } : {})}
         className={`group relative block overflow-hidden rounded-[6px] bg-ink ${wide ? 'lg:row-span-2' : ''}`}>
-        {c.clips?.length ? (
+        {c.cover ? (
+          <img src={c.cover} alt={c.name} loading="lazy" className="aspect-[7/3] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" />
+        ) : c.clips?.length ? (
           <div className="grid grid-cols-3 gap-1">
             {c.clips.map((k) => (
               <div key={k.src} className="relative overflow-hidden">
@@ -50,13 +52,15 @@ function CaseCard({ c, wide }) {
       </Media>
 
       <div className={`flex flex-col gap-2 ${wide ? 'lg:self-end' : ''}`}>
-        <h3 className="h-display text-[clamp(32px,4.4vw,60px)]">{c.name}</h3>
+        <h3 className={`h-display ${c.name.length > 14 ? 'text-[clamp(24px,2.6vw,34px)] !leading-[1.1]' : 'text-[clamp(32px,4.4vw,60px)]'}`}>{c.name}</h3>
         {c.subtitle && <p className="text-[clamp(17px,1.8vw,21px)] font-medium">{c.subtitle}</p>}
       </div>
 
-      <div className="grid content-start gap-x-8 gap-y-3 border-t border-black/10 pt-5 sm:grid-cols-2">
-        {lines.map((m, i) => <Metric key={i} {...m} />)}
-      </div>
+      {lines.length > 0 && (
+        <div className="grid content-start gap-x-8 gap-y-3 border-t border-black/10 pt-5 sm:grid-cols-2">
+          {lines.map((m, i) => <Metric key={i} {...m} />)}
+        </div>
+      )}
     </Reveal>
   )
 }
