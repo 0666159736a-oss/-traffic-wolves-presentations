@@ -5,7 +5,7 @@
 
 // Фото для першого екрана: реалістичні лимони (як фон платформи lemonclips.com).
 // Покладіть файл у public/offer/ та вкажіть шлях, напр. 'offer/hero-lemons.jpg'. Рекомендовано 2400×1600, JPEG ~300 КБ.
-export const heroPhoto = ''
+export const heroPhoto = 'offer/hero-lemons.jpg'
 
 export const price = { perThousand: 0.5, minViews: 1_000_000, step: 1_000_000, maxViews: 50_000_000 }
 
@@ -65,7 +65,7 @@ export const process = {
 // {
 //   id: 'slug',
 //   name: 'Назва артиста / проєкту',
-//   photo: 'offer/cases/slug.jpg',              // реальне фото (public/offer/cases)
+//   photos: ['offer/cases/slug.jpg'],           // 1–2 реальні фото (public/offer/cases)
 //   tags: ['Music Promotion', 'Artist Growth'],   // тип просування
 //   subtitle: 'Короткий опис просування',
 //   views: '12 400 000',                          // кількість переглядів
@@ -77,10 +77,10 @@ export const cases = [
   {
     id: 'harfang',
     name: 'HARFANG',
-    photo: 'offer/cases/harfang.jpg',
+    photos: ['offer/cases/harfang.jpg', 'offer/cases/harfang-2.jpg'],
     tags: ['Music Promotion', 'Artist Growth'],
-    subtitle: '',
-    views: '',
+    subtitle: 'Завдяки 3 млн переглядів трек піднявся в ТОП-3 чартів.',
+    views: '3 000 000',
     metrics: [{ value: 'ТОП-3', label: 'у чартах' }],
     extra: [],
     details: null,

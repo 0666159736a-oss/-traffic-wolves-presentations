@@ -8,9 +8,10 @@ export default function Hero() {
       {/* Real lemon photography, darkened for legibility */}
       <div className="absolute inset-0 -z-10">
         {heroPhoto
-          ? <img src={heroPhoto} alt="" fetchpriority="high" className="size-full object-cover animate-[kenburns_14s_ease-out_both]" />
+          ? <img src={heroPhoto} alt="" fetchpriority="high" className="size-full object-cover object-[70%_50%] animate-[kenburns_14s_ease-out_both]" />
           : <div className="size-full" style={{ background: 'radial-gradient(60% 70% at 78% 30%, rgb(246 210 60 / .55), transparent 60%), radial-gradient(40% 50% at 95% 90%, rgb(217 168 0 / .4), transparent 70%), radial-gradient(50% 60% at 10% 100%, rgb(246 210 60 / .18), transparent 70%), #0a0a0a' }} />}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/55 to-black/20" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/55 to-black/5 sm:via-black/40" />
+        <div className="absolute inset-0 bg-black/30 sm:hidden" />
         <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-ink to-transparent" />
       </div>
       {!heroPhoto && (

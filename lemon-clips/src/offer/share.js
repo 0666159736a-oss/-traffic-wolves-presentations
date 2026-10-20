@@ -1,7 +1,7 @@
 // Copy-link and PDF export for the commercial offer.
 
 /** Public URL to share. Set it once the site is deployed (e.g. 'https://offer.lemonclips.com'); otherwise the current address is used. */
-export const SHARE_URL = ''
+export const SHARE_URL = 'https://claude.ai/artifact/B8QbbTLrFo7khic5VaLhbj'
 
 export async function copyLink() {
   const url = SHARE_URL || location.href.split('#')[0]
@@ -41,7 +41,14 @@ export async function downloadPdf(onProgress) {
       pdf.addImage(img, 'JPEG', 0, 0, pw, ph, undefined, 'FAST')
     }
     pdf.setProperties({ title: 'Lemon Clips — Комерційна пропозиція', author: 'Lemon Clips' })
-    pdf.save('Lemon-Clips-Komertsiina-propozytsiia.pdf')
+    const filename = 'Lemon-Clips-Komertsiina-propozytsiia.pdf'
+    // Inside the claude.ai preview the viewer must confirm the save; on a normal host the browser downloads it.
+    const downloads = window.claude?.use ? await window.claude.use('downloads') : null
+    if (downloads) {
+      try { await downloads.save({ filename, data: pdf.output('blob') }); return { ok: true } }
+      catch (e) { return { ok: false, declined: e?.code === 'declined' } }
+    }
+    pdf.save(filename)
     return { ok: true }
   } catch (e) {
     console.error(e)

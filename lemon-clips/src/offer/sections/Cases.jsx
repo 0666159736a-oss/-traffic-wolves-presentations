@@ -27,9 +27,14 @@ function CaseCard({ c }) {
 
       <Media {...(c.details?.url ? { href: c.details.url, target: '_blank', rel: 'noopener noreferrer' } : {})}
         className="group relative block overflow-hidden rounded-[6px] bg-ink lg:row-span-2">
-        {c.photo
-          ? <img src={c.photo} alt={c.name} loading="lazy" className="aspect-[4/3] w-full object-cover object-[50%_30%] transition-transform duration-700 group-hover:scale-[1.03] lg:aspect-square" />
-          : <div className="grid aspect-[4/3] place-items-center text-[14px] text-white/60 lg:aspect-square">Фото буде додано</div>}
+        {c.photos?.length ? (
+          <div className={`grid gap-1 ${c.photos.length > 1 ? 'grid-cols-2' : ''}`}>
+            {c.photos.slice(0, 2).map((src, i) => (
+              <img key={src} src={src} alt={i ? '' : c.name} loading="lazy"
+                className={`w-full object-cover object-[50%_30%] transition-transform duration-700 group-hover:scale-[1.03] ${c.photos.length > 1 ? 'aspect-[3/4]' : 'aspect-[4/3] lg:aspect-square'}`} />
+            ))}
+          </div>
+        ) : <div className="grid aspect-[4/3] place-items-center text-[14px] text-white/60 lg:aspect-square">Фото буде додано</div>}
         {c.details?.url && (
           <span data-pdf-hide className="absolute bottom-4 left-4 inline-flex items-center gap-6 rounded-full bg-ink py-2 pl-6 pr-2 font-[family-name:var(--font-mono)] text-[15px] text-white sm:bottom-6 sm:left-6">
             {c.details.label || 'Детальніше'}

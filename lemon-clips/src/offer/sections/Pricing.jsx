@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { costOf, fmtNum, fmtUsd, price, pricing } from '../content.js'
+import { costOf, fmtNum, fmtUsd, heroPhoto, price, pricing } from '../content.js'
 import { Minus, Plus, Reveal, SectionTitle } from '../ui.jsx'
 
 const QUICK = [1, 3, 5, 10, 20]
@@ -53,11 +53,13 @@ export default function Pricing() {
       <div className="wrap flex flex-col gap-8">
         <Reveal><SectionTitle kicker="Вартість просування">{pricing.title[0]}<br /><span className="text-lemon">{pricing.title[1]}</span></SectionTitle></Reveal>
 
-        <Reveal className="flex flex-col items-start justify-between gap-4 rounded-[32px] bg-lemon p-6 text-ink sm:flex-row sm:items-center sm:p-10">
-          <div className="h-display text-[clamp(36px,6.4vw,84px)] !leading-[.95]">
-            <span className="tnum">${price.perThousand.toFixed(2)}</span> ЗА<br />1 000 ПЕРЕГЛЯДІВ
+        <Reveal className="relative isolate flex flex-col items-start justify-between gap-5 overflow-hidden rounded-[32px] border border-lemon/40 bg-ink p-6 sm:flex-row sm:items-end sm:p-10">
+          {heroPhoto && <img src={heroPhoto} alt="" loading="lazy" className="absolute inset-0 -z-10 size-full object-cover object-[80%_50%] opacity-90" />}
+          <div className="absolute inset-0 -z-10 bg-gradient-to-r from-black/90 via-black/60 to-black/10" />
+          <div className="h-display text-[clamp(36px,6.4vw,84px)] !leading-[.95] text-white">
+            <span className="tnum text-lemon">${price.perThousand.toFixed(2)}</span> ЗА<br />1 000 ПЕРЕГЛЯДІВ
           </div>
-          <div className="rounded-full bg-ink px-5 py-3 text-[clamp(13px,1.4vw,16px)] font-extrabold text-lemon">{pricing.min}</div>
+          <div className="rounded-full bg-lemon px-5 py-3 text-[clamp(13px,1.4vw,16px)] font-extrabold text-ink">{pricing.min}</div>
         </Reveal>
 
         <div className="grid gap-4 lg:grid-cols-[1fr_1.1fr]">

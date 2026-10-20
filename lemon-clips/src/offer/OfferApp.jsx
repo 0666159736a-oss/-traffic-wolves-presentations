@@ -23,7 +23,7 @@ export default function OfferApp() {
     setBusy(true)
     const r = await downloadPdf()
     setBusy(false)
-    say(r.ok ? 'PDF завантажено' : 'Не вдалося створити PDF. Спробуйте ще раз.')
+    say(r.ok ? 'PDF готовий' : r.declined ? 'Завантаження скасовано' : 'Не вдалося створити PDF. Спробуйте ще раз.')
   }
 
   return (
